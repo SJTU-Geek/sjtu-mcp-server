@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SJTUGeek.MCP.Server", "SJTU
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "SJTUGeek.MCP.Scripts", "SJTUGeek.MCP.Scripts\SJTUGeek.MCP.Scripts.pyproj", "{E4994378-F3ED-4B99-AD7E-81B24FE08A94}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelContextProtocol.Core", "mcp-csharp-sdk\src\ModelContextProtocol.Core\ModelContextProtocol.Core.csproj", "{21FEB18A-433D-037E-CFF4-6CCCE25A5087}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{5ECA5D2E-25C4-4C51-90FC-05CC185EE991}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E4994378-F3ED-4B99-AD7E-81B24FE08A94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E4994378-F3ED-4B99-AD7E-81B24FE08A94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21FEB18A-433D-037E-CFF4-6CCCE25A5087}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21FEB18A-433D-037E-CFF4-6CCCE25A5087}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21FEB18A-433D-037E-CFF4-6CCCE25A5087}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21FEB18A-433D-037E-CFF4-6CCCE25A5087}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

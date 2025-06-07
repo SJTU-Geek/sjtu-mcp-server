@@ -1,6 +1,7 @@
 using ModelContextProtocol.Server;
 using SJTUGeek.MCP.Server.Helpers;
 using SJTUGeek.MCP.Server.Models;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace SJTUGeek.MCP.Server.Extensions
@@ -62,7 +63,10 @@ namespace SJTUGeek.MCP.Server.Extensions
 
             var schemaCreateOptions = new Microsoft.Extensions.AI.AIJsonSchemaCreateOptions()
             {
-                RequireAllProperties = false
+                TransformOptions = new Microsoft.Extensions.AI.AIJsonSchemaTransformOptions()
+                {
+                    RequireAllProperties = true,
+                }
             };
 
             foreach (var toolType in toolTypes)
@@ -75,7 +79,7 @@ namespace SJTUGeek.MCP.Server.Extensions
                         {
                             builder.Services.AddSingleton((Func<IServiceProvider, McpServerTool>)(toolMethod.IsStatic ?
                                 services => McpServerTool.Create(toolMethod, options: new() { Services = services, SchemaCreateOptions = schemaCreateOptions }) :
-                                services => McpServerTool.Create(toolMethod, toolType, new() { Services = services, SchemaCreateOptions = schemaCreateOptions })));
+                                services => McpServerTool.Create(toolMethod, r => CreateTarget(r.Services, toolType), new() { Services = services, SchemaCreateOptions = schemaCreateOptions })));
                         }
                     }
                 }
@@ -83,5 +87,11 @@ namespace SJTUGeek.MCP.Server.Extensions
 
             return builder;
         }
+
+        private static object CreateTarget(
+        IServiceProvider? services,
+        Type type) =>
+        services is not null ? ActivatorUtilities.CreateInstance(services, type) :
+        Activator.CreateInstance(type)!;
     }
 }

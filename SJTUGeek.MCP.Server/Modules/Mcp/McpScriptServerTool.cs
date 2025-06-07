@@ -1,6 +1,5 @@
 using Microsoft.Extensions.AI;
-using ModelContextProtocol.Protocol.Types;
-using ModelContextProtocol.Utils.Json;
+using ModelContextProtocol.Protocol;
 using Python.Runtime;
 using SJTUGeek.MCP.Server.Extensions;
 using SJTUGeek.MCP.Server.Models;

@@ -1,5 +1,7 @@
-﻿using ModelContextProtocol.Protocol.Types;
+﻿using Microsoft.Extensions.AI;
+using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
+using SJTUGeek.MCP.Server.Extensions;
 using System.ComponentModel;
 
 namespace SJTUGeek.MCP.Server.StaticTools;
@@ -8,8 +10,12 @@ namespace SJTUGeek.MCP.Server.StaticTools;
 public class TestTool
 {
     [McpServerTool(Name = "test"), Description("Test system.")]
-    public static string Test(RequestContext<CallToolRequestParams> context)
+    public static CallToolResponse Test(RequestContext<CallToolRequestParams> context)
     {
-        return "ok";
+        byte[] bytes = File.ReadAllBytes(@"C:\Users\teru\Downloads\test_img.jpg");
+        return new CallToolResponse() { IsError = false, Content = new List<Content>() { 
+            new Content() { Text = "场景1" } ,
+            new DataContent(bytes, "image/png").ToContent(),
+        } };
     }
 }

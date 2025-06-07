@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace SJTUGeek.MCP.Server.StaticTools;
 
-[McpServerToolType]
+//[McpServerToolType]
 public class AddTool
 {
     [McpServerTool(Name = "add"), Description("Adds two numbers.")]
