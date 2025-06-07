@@ -1,8 +1,12 @@
-using ModelContextProtocol.Protocol.Types;
+using ModelContextProtocol.Protocol;
 using Python.Runtime;
 using SJTUGeek.MCP.Server.Extensions;
+using SJTUGeek.MCP.Server.Helpers;
 using SJTUGeek.MCP.Server.Models;
 using SJTUGeek.MCP.Server.Modules;
+using SJTUGeek.MCP.Server.Tools.SjtuJw;
+using SJTUGeek.MCP.Server.Tools.SjtuMail;
+using SJTUGeek.MCP.Server.Tools.SjtuVenue;
 using System.CommandLine;
 
 namespace SJTUGeek.MCP.Server
@@ -114,6 +118,12 @@ namespace SJTUGeek.MCP.Server
             builder.Services.AddSingleton<CookieContainerProvider>();
             builder.Services.AddScoped<HttpClientFactory>();
             builder.Services.AddSingleton<MemoryCacheWrapper>();
+
+            builder.Services.AddScoped<SjtuMailService>();
+            builder.Services.AddScoped<SjtuJwService>();
+            builder.Services.AddScoped<SjtuVenueService>();
+
+            builder.Services.AddSingleton<RerankHelper>();
 
             builder.WebHost.UseUrls($"http://{appOptions.Host}:{appOptions.Port}");
 
