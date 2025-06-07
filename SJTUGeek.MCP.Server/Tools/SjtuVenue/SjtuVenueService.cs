@@ -69,20 +69,40 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             return json.Rows;
         }
 
-        public VenueInfoDto GetVenueInfo(string venueId)
+        public async Task<List<VenueMotionType>> GetMotionTypes()
+        {
+            HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, "https://sports.sjtu.edu.cn/manage/motionType/typeList");
+            JsonContent content = JsonContent.Create("{}");
+            req.Content = content;
+            var res = await _client.SendAsync(req);
+            if (!res.IsSuccessStatusCode)
+            {
+                throw new Exception($"请求失败，服务器响应{res.StatusCode}");
+            }
+
+            var json = JsonConvert.DeserializeObject<List<VenueMotionType>>(await res.Content.ReadAsStringAsync());
+            if (json.Count == 0)
+            {
+                throw new Exception($"请求失败");
+            }
+
+            return json;
+        }
+
+        public async Task<VenueInfoDto> GetVenueInfo(string venueId)
         {
             HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, "https://sports.sjtu.edu.cn/manage/venue/queryVenueById");
             Dictionary<string, string> forms = new Dictionary<string, string>();
             forms.Add("id", venueId);
             FormUrlEncodedContent content = new FormUrlEncodedContent(forms);
             req.Content = content;
-            var res = _client.SendAsync(req).Result;
+            var res = await _client.SendAsync(req);
             if (!res.IsSuccessStatusCode)
             {
                 throw new Exception($"请求失败，服务器响应{res.StatusCode}");
             }
 
-            var json = JsonConvert.DeserializeObject<VenueResWrapper<VenueInfoDto>>(res.Content.ReadAsStringAsync().Result);
+            var json = JsonConvert.DeserializeObject<VenueResWrapper<VenueInfoDto>>(await res.Content.ReadAsStringAsync());
             if (json.Code != 0)
             {
                 throw new Exception($"请求失败：{json.Msg}");
@@ -91,7 +111,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             return json.Data;
         }
 
-        public List<VenueDateInfo> GetDateInfo() //string venueId, string fieldId, string date
+        public async Task<List<VenueDateInfo>> GetDateInfo() //string venueId, string fieldId, string date
         {
             HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, "https://sports.sjtu.edu.cn/manage/fieldDetail/queryFieldReserveSituationIsFull");
             //string payload = $$"""
@@ -104,13 +124,13 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             //StringContent content = new StringContent(payload);
             //content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
             //req.Content = content;
-            var res = _client.SendAsync(req).Result;
+            var res = await _client.SendAsync(req);
             if (!res.IsSuccessStatusCode)
             {
                 throw new Exception($"请求失败，服务器响应{res.StatusCode}");
             }
 
-            var body = res.Content.ReadAsStringAsync().Result;
+            var body = await res.Content.ReadAsStringAsync();
 
             var json = JsonConvert.DeserializeObject<VenueResWrapper<List<VenueDateInfo>>>(body);
 
@@ -122,7 +142,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             return json.Data;
         }
 
-        public List<VenueFieldInfo> GetFieldInfo(string venueId, string fieldId, string time, string dateId)
+        public async Task<List<VenueFieldInfo>> GetFieldInfo(string venueId, string fieldId, string time, string dateId)
         {
             HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, "https://sports.sjtu.edu.cn/manage/fieldDetail/queryFieldSituation");
             string payload = $$"""
@@ -136,13 +156,13 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             StringContent content = new StringContent(payload);
             content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
             req.Content = content;
-            var res = _client.SendAsync(req).Result;
+            var res = await _client.SendAsync(req);
             if (!res.IsSuccessStatusCode)
             {
                 throw new Exception($"请求失败，服务器响应{res.StatusCode}");
             }
 
-            var json = JsonConvert.DeserializeObject<VenueResWrapper<List<VenueFieldInfo>>>(res.Content.ReadAsStringAsync().Result);
+            var json = JsonConvert.DeserializeObject<VenueResWrapper<List<VenueFieldInfo>>>(await res.Content.ReadAsStringAsync());
             if (json.Code != 0)
             {
                 throw new Exception($"请求失败：{json.Msg}");
@@ -151,7 +171,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             return json.Data;
         }
 
-        public string Reserve(VenueOrderInput input)
+        public async Task<string> Reserve(VenueOrderInput input)
         {
             var jsonstr = JsonConvert.SerializeObject(input);
             var jsonenc = AesHelper.Encrypt(
@@ -177,7 +197,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
                 )
             ));
 
-            var res = _client.SendAsync(req).Result;
+            var res = await _client.SendAsync(req);
             if (!res.IsSuccessStatusCode)
             {
                 throw new Exception($"请求失败，服务器响应{res.StatusCode}");
@@ -185,7 +205,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             if (res.Content.Headers.ContentType.MediaType == "text/html")
             {
                 var parser = new AngleSharp.Html.Parser.HtmlParser();
-                var document = parser.ParseDocument(res.Content.ReadAsStringAsync().Result);
+                var document = parser.ParseDocument(await res.Content.ReadAsStringAsync());
 
                 var cell = document.QuerySelector("div.error-desc");
                 if (cell == null)
@@ -193,7 +213,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
                 throw new Exception(cell.TextContent.Trim());
             }
 
-            var json = JsonConvert.DeserializeObject<VenueResWrapper<string>>(res.Content.ReadAsStringAsync().Result);
+            var json = JsonConvert.DeserializeObject<VenueResWrapper<string>>(await res.Content.ReadAsStringAsync());
             if (json.Code != 0)
             {
                 throw new Exception($"请求失败：{json.Msg}");

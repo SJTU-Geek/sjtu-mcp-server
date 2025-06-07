@@ -143,6 +143,21 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
         public string Status { get; set; }
     }
 
+    public partial class VenueMotionType
+    {
+        [JsonProperty("img")]
+        public string Img { get; set; }
+
+        [JsonProperty("venueType")]
+        public string VenueType { get; set; }
+
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("venueTypeEn")]
+        public string VenueTypeEn { get; set; }
+    }
+
     public partial class VenueItem
     {
         [JsonProperty("campusId")]
@@ -211,8 +226,14 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
         [JsonProperty("venueName")]
         public string VenueName { get; set; }
 
+        [JsonProperty("venueNameEn")]
+        public string VenueNameEn { get; set; }
+
         [JsonProperty("venueRule")]
         public string VenueRule { get; set; }
+
+        [JsonProperty("venueRuleEn")]
+        public string VenueRuleEn { get; set; }
 
         [JsonProperty("venueState")]
         public string VenueState { get; set; }
