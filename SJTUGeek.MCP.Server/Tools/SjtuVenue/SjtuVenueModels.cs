@@ -481,6 +481,9 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
         [JsonProperty("orderstateid")]
         public string OrderStateId { get; set; }
 
+        [JsonProperty("ordercreatement")]
+        public string OrderCreatement { get; set; }
+
         [JsonProperty("price")]
         public long Price { get; set; }
 
@@ -493,8 +496,14 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
         [JsonProperty("scheduleDate")]
         public string ScheduleDate { get; set; }
 
+        [JsonProperty("scDate")]
+        public string ScDate { get; set; }
+
         [JsonProperty("spaces")]
         public List<VenueOrderSpaceInfo> Spaces { get; set; }
+
+        [JsonProperty("spaceInfo")]
+        public string SpaceInfo { get; set; }
 
         [JsonProperty("sumMoney")]
         public long SumMoney { get; set; }

@@ -1,6 +1,12 @@
-﻿using ModelContextProtocol;
+﻿using Microsoft.Extensions.AI;
+using ModelContextProtocol;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Drawing.Processing;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+using SJTUGeek.MCP.Server.Extensions;
 using SJTUGeek.MCP.Server.Helpers;
 using System.ComponentModel;
 
@@ -37,42 +43,15 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
         )
         {
             await _venue.Login();
-            var vs = await _venue.GetVenues();
+            VenueItem v = await SearchForVenue(venue_name);
 
-            // simple fuzzy match
-            vs.FindAll(v => v.VenueName == "霍英东体育中心").ForEach(v => v.VenueName = v.VenueName + "（霍体）");
-            vs.FindAll(v => v.VenueName == "南区体育馆").ForEach(v => v.VenueName = v.VenueName + "（南体）");
-            vs.FindAll(v => v.VenueName == "胡法光体育场").ForEach(v => v.VenueName = v.VenueName + "（光体）");
-            vs.FindAll(v => v.VenueName == "学生创新中心").ForEach(v => v.VenueName = v.VenueName + "（学创）");
+            //return $"{venue_name} 匹配 {vs[matchedVenueInfo.Item2].VenueName}（可信度：{matchedVenueInfo.Item1}）";
 
-            var matchedVenueInfo = await _rerank.FindMostRelevant(venue_name, vs.Select(v => v.VenueName).ToList());
-            var v = vs[matchedVenueInfo.Item2];
-
-            //if (matchedVenueInfo.Item1 < 0.5)
-            //{
-            //    throw new McpException($"无法匹配场馆 {venue_name}，请检查输入是否正确");
-            //}
-
-            return $"{venue_name} 匹配 {vs[matchedVenueInfo.Item2].VenueName}（可信度：{matchedVenueInfo.Item1}）";
-
-            var ms = await _venue.GetMotionTypes();
-
-            // add english
-            var ms_doc = ms.Select(m => $"{m.VenueType}（{m.VenueTypeEn}）").ToList();
-
-            var matchedMotionInfo = await _rerank.FindMostRelevant(room_or_sports_name, ms_doc);
-            var m = ms[matchedMotionInfo.Item2];
-
-            // it should be high
-            if (matchedMotionInfo.Item1 < 0.9)
-            {
-                throw new McpException($"无法匹配运动类型 {room_or_sports_name}，请检查输入是否正确");
-            }
+            VenueMotionType m = await SearchForMotionType(room_or_sports_name);
 
             //return $"{room_or_sports_name} 匹配 {ms[matchedMotionInfo.Item2].VenueType}（可信度：{matchedMotionInfo.Item1}）";
 
             var v_info = await _venue.GetVenueInfo(v.VenueId);
- 
             var r = v_info.MotionTypes.FirstOrDefault(x => x.Name == room_or_sports_name);
             if (r == null)
             {
@@ -150,7 +129,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
                 var res5 = await _venue.Reserve(order);
                 return $"预约成功，请及时前往交我办“场馆预约”进行付款！（订单号：{res5}）";
             }
-            
+
             //if (input.Accompany != null)
             //{
             //    var res6 = _venue.GetAccompanyInfo();
@@ -183,6 +162,159 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             //        return new CommonResult(false, res7.Message);
             //    }
             //}
+        }
+
+
+        [McpServerTool(Name = "get_venue_info"), Description("Get information of a venue by its name.")]
+        public async Task<object> ToolGetVenueInfo(
+            [Description("Name of the venue to get information from.")]
+            string venue_name
+        )
+        {
+            await _venue.Login();
+            VenueItem v = await SearchForVenue(venue_name);
+            var res = await _venue.GetVenueInfo(v.VenueId);
+            return RenderVenueInfo(res);
+        }
+
+        [McpServerTool(Name = "get_field_availability_map"), Description("Obtain a map of the venue reservation status for a specified venue, sport, and date.")]
+        public async Task<object> ToolGetFieldAvailabilityMap(
+            [Description("Name of the venue to be booked.")]
+            string venue_name,
+            [Description("Name of sport to be booked (e.g. 乒乓球、篮球、健身房、钢琴)")]
+            string room_or_sports_name,
+            [Description($"Appointment date in the format YYYY-MM-dd.")]
+            string date
+        )
+        {
+            await _venue.Login();
+            VenueItem v = await SearchForVenue(venue_name);
+            VenueMotionType m = await SearchForMotionType(room_or_sports_name);
+
+            var v_info = await _venue.GetVenueInfo(v.VenueId);
+            var r = v_info.MotionTypes.FirstOrDefault(x => x.Name == room_or_sports_name);
+            if (r == null)
+            {
+                throw new McpException($"找不到区域 {r}");
+            }
+
+            var res35 = await _venue.GetDateInfo();
+            var targetDate = res35.FirstOrDefault(x => x.Date == date);
+            if (targetDate == null)
+            {
+                throw new McpException($"您要预约的日期尚未开放");
+            }
+
+            var fs = await _venue.GetFieldInfo(v.VenueId, r.Id, date, targetDate.DateId);
+
+            MemoryStream ms = new MemoryStream();
+            Image<Rgba32> image = new(100, 100);
+            image.Mutate(ctx => ctx.Fill(Color.Coral));
+            await image.SaveAsPngAsync(ms);
+            return new CallToolResponse() {
+                IsError = false,
+                Content = new List<Content>() {
+                    new Content() { Text = $"{targetDate.Date} 的 {v.VenueName} {m.VenueType} 场地状态图" } ,
+                    new DataContent(ms.ToArray(), "image/png").ToContent(),
+                }
+            };
+        }
+
+        [McpServerTool(Name = "get_venue_orders"), Description("Get personal venue reservation orders.")]
+        public async Task<object> ToolGetPersonalOrders()
+        {
+            await _venue.Login();
+            var res = await _venue.GetOrderList();
+            return RenderOrderList(res);
+        }
+
+        [McpServerTool(Name = "cancel_venue_order"), Description("Cancel an venue reservation order by its ID.")]
+        public async Task<object> ToolCancelOrder(
+            string order_id
+        )
+        {
+            await _venue.Login();
+            var res = await _venue.CancelOrder(order_id);
+            if (res)
+            {
+                return new CallToolResponse() { IsError = false, Content = new List<Content>() { new Content() { Text = "订单取消成功" } } };
+            }
+            else
+            {
+                return new CallToolResponse() { IsError = true, Content = new List<Content>() { new Content() { Text = $"订单取消失败" } } };
+            }
+        }
+
+        private async Task<VenueItem> SearchForVenue(string venue_name)
+        {
+            var vs = await _venue.GetVenues();
+
+            // simple fuzzy match
+            vs.FindAll(v => v.VenueName == "霍英东体育中心").ForEach(v => v.VenueName = v.VenueName + "（霍体）");
+            vs.FindAll(v => v.VenueName == "南区体育馆").ForEach(v => v.VenueName = v.VenueName + "（南体）");
+            vs.FindAll(v => v.VenueName == "胡法光体育场").ForEach(v => v.VenueName = v.VenueName + "（光体）");
+            vs.FindAll(v => v.VenueName == "学生创新中心").ForEach(v => v.VenueName = v.VenueName + "（学创）");
+
+            var matchedVenueInfo = await _rerank.FindMostRelevant(venue_name, vs.Select(v => v.VenueName).ToList());
+            var v = vs[matchedVenueInfo.Item2];
+
+            if (matchedVenueInfo.Item1 < 0.5)
+            {
+                throw new McpException($"无法匹配场馆 {venue_name}，请检查输入是否正确");
+            }
+
+            return v;
+        }
+
+        private async Task<VenueMotionType> SearchForMotionType(string room_or_sports_name)
+        {
+            var ms = await _venue.GetMotionTypes();
+
+            // add english
+            var ms_doc = ms.Select(m => $"{m.VenueType}（{m.VenueTypeEn}）").ToList();
+
+            var matchedMotionInfo = await _rerank.FindMostRelevant(room_or_sports_name, ms_doc);
+            var m = ms[matchedMotionInfo.Item2];
+
+            // it should be high
+            if (matchedMotionInfo.Item1 < 0.8)
+            {
+                throw new McpException($"无法匹配运动类型 {room_or_sports_name}，请检查输入是否正确");
+            }
+
+            return m;
+        }
+
+        private string RenderVenueInfo(VenueInfoDto v)
+        {
+            var res =
+            $"- {v.VenueName}" + "\n" +
+            $"  场馆设施：{HtmlHelper.HtmlToPlainText(v.VenueFacilities)}" + "\n" +
+            $"  场馆介绍：{HtmlHelper.HtmlToPlainText(v.VenueInfo)}" + "\n" +
+            $"  使用须知：{HtmlHelper.HtmlToPlainText(v.VenueRule)}" + "\n" +
+            ""
+            ;
+            return res;
+        }
+
+        private string RenderSingleOrder(VenueOrderInfo order)
+        {
+            var res =
+            $"- 订单编号：{order.Id}" + "\n" +
+            $"  场馆：{order.VenueName}" + "\n" +
+            $"  日期：{order.ScDate}" + "\n" +
+            $"  场地：{order.SpaceInfo}" + "\n" +
+            $"  创建日期：{order.OrderCreatement}" + "\n" +
+            "" // Todo: 随行人
+            ;
+            return res;
+        }
+
+        private string RenderOrderList(List<VenueOrderInfo> list)
+        {
+            if (list.Count == 0)
+                return "还没有个人订单哦~";
+            return string.Join('\n', list.Select(x => RenderSingleOrder(x)));
         }
     }
 }

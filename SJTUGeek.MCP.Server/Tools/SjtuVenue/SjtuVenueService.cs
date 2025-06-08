@@ -241,21 +241,21 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             return json.Data;
         }        
         
-        public List<VenueOrderInfo> GetOrderList()
+        public async Task<List<VenueOrderInfo>> GetOrderList()
         {
             HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Get, "https://sports.sjtu.edu.cn/venue/personal/personalOrderlist?pageNo=1&pageSize=10");
-            var res = _client.SendAsync(req).Result;
+            var res = await _client.SendAsync(req);
             if (!res.IsSuccessStatusCode)
             {
                 throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
 
-            var json = JsonConvert.DeserializeObject<VenueOrderListResWrapper>(res.Content.ReadAsStringAsync().Result);
+            var json = JsonConvert.DeserializeObject<VenueOrderListResWrapper>(await res.Content.ReadAsStringAsync());
 
             return json.Records;
         }        
         
-        public bool CancelOrder(string orderId)
+        public async Task<bool> CancelOrder(string orderId)
         {
             HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, "https://sports.sjtu.edu.cn/tRefundReceipt/tRefundReceipt/createUserReceipt");
             Dictionary<string, string> forms = new Dictionary<string, string>();
@@ -263,16 +263,16 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             forms.Add("type", "2");
             FormUrlEncodedContent content = new FormUrlEncodedContent(forms);
             req.Content = content;
-            var res = _client.SendAsync(req).Result;
+            var res = await _client.SendAsync(req);
             if (!res.IsSuccessStatusCode)
             {
                 throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
 
-            var json = JsonConvert.DeserializeObject<VenueResWrapper<string>>(res.Content.ReadAsStringAsync().Result);
+            var json = JsonConvert.DeserializeObject<VenueResWrapper<string>>(await res.Content.ReadAsStringAsync());
             if (json.Code != 4)
             {
-                throw new McpException($"请求失败：{json.Msg}");
+                throw new McpException($"{json.Msg}");
             }
 
             return true;
