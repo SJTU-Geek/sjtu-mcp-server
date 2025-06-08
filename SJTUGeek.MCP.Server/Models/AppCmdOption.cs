@@ -15,6 +15,8 @@ namespace SJTUGeek.MCP.Server.Models
         public bool EnableSse { get; set; }
         public string? JaAuthCookie { get; set; }
         public List<string>? EnabledToolGroups { get; set; }
+        public string? BgeRerankModel { get; set; }
+        public string? LlmRerankModel { get; set; }
     }
 
     public class AppCmdOptionBinder : BinderBase<AppCmdOption>
@@ -26,8 +28,10 @@ namespace SJTUGeek.MCP.Server.Models
         private readonly Option<bool> _sseOption;
         private readonly Option<string?> _cookieOption;
         private readonly Option<List<string>?> _toolGroupOption;
+        private readonly Option<string?> _bgeRerankModelOption;
+        private readonly Option<string?> _llmRerankModelOption;
 
-        public AppCmdOptionBinder(Option<int> portOption, Option<string> hostOption, Option<string?> pyDllOption, Option<string?> jsEngineOption, Option<bool> sseOption, Option<string?> cookieOption, Option<List<string>?> toolGroupOption)
+        public AppCmdOptionBinder(Option<int> portOption, Option<string> hostOption, Option<string?> pyDllOption, Option<string?> jsEngineOption, Option<bool> sseOption, Option<string?> cookieOption, Option<List<string>?> toolGroupOption, Option<string?> bgeRerankModelOption, Option<string?> llmRerankModelOption)
         {
             _portOption = portOption;
             _hostOption = hostOption;
@@ -36,6 +40,8 @@ namespace SJTUGeek.MCP.Server.Models
             _sseOption = sseOption;
             _cookieOption = cookieOption;
             _toolGroupOption = toolGroupOption;
+            _bgeRerankModelOption = bgeRerankModelOption;
+            _llmRerankModelOption = llmRerankModelOption;
         }
 
         protected override AppCmdOption GetBoundValue(BindingContext bindingContext)
@@ -54,6 +60,8 @@ namespace SJTUGeek.MCP.Server.Models
                 EnableSse = bindingContext.ParseResult.GetValueForOption(_sseOption),
                 JaAuthCookie = bindingContext.ParseResult.GetValueForOption(_cookieOption),
                 EnabledToolGroups = bindingContext.ParseResult.GetValueForOption(_toolGroupOption),
+                BgeRerankModel = bindingContext.ParseResult.GetValueForOption(_bgeRerankModelOption),
+                LlmRerankModel = bindingContext.ParseResult.GetValueForOption(_llmRerankModelOption)
             };
 
             return opt;

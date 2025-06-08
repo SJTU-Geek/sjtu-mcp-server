@@ -49,6 +49,16 @@ namespace SJTUGeek.MCP.Server
                 getDefaultValue: () => new List<string>(),
                 description: "指定启用的 MCP 工具组。"
             );
+            var bgeRerankModelOption = new Option<string?>(
+                aliases: new string[] { "--bge-rerank-model" },
+                getDefaultValue: () => null,
+                description: "指定 BGE 重排序模型的文件路径。"
+            );
+            var llmRerankModelOption = new Option<string?>(
+                aliases: new string[] { "--llm-rerank-model" },
+                getDefaultValue: () => null,
+                description: "指定通用重排序模型的文件路径。"
+            );
 
             var rootCommand = new RootCommand("Welcome to SJTUGeek.MCP!");
             rootCommand.AddOption(portOption);
@@ -58,6 +68,8 @@ namespace SJTUGeek.MCP.Server
             rootCommand.AddOption(sseOption);
             rootCommand.AddOption(cookieOption);
             rootCommand.AddOption(toolGroupOption);
+            rootCommand.AddOption(bgeRerankModelOption);
+            rootCommand.AddOption(llmRerankModelOption);
 
             rootCommand.SetHandler((appOptions) =>
             {
@@ -69,7 +81,9 @@ namespace SJTUGeek.MCP.Server
                 jsEngineOption,
                 sseOption,
                 cookieOption,
-                toolGroupOption
+                toolGroupOption,
+                bgeRerankModelOption,
+                llmRerankModelOption
             ));
 
             await rootCommand.InvokeAsync(args);
