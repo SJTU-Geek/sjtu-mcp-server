@@ -1,4 +1,5 @@
-﻿using SJTUGeek.MCP.Server.Modules;
+﻿using ModelContextProtocol;
+using SJTUGeek.MCP.Server.Modules;
 using System.Net;
 
 namespace SJTUGeek.MCP.Server.Tools.SjtuJw
@@ -19,10 +20,17 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuJw
             {
                 res = await _client.GetAsync(res.Headers.Location.OriginalString.Replace("http", "https"));
             }
-            res.EnsureSuccessStatusCode();
+            try
+            {
+                res.EnsureSuccessStatusCode();
+            }
+            catch (Exception e)
+            {
+                throw new McpException(e.Message);
+            }
             if (!res.RequestMessage.RequestUri.OriginalString.StartsWith("https://i.sjtu.edu.cn/"))
             {
-                throw new Exception("认证失败");
+                throw new McpException("认证失败");
             }
             return true;
         }
@@ -45,7 +53,14 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuJw
             req.Content = new FormUrlEncodedContent(forms);
 
             var res = await _client.SendAsync(req);
-            res.EnsureSuccessStatusCode();
+            try
+            {
+                res.EnsureSuccessStatusCode();
+            }
+            catch (Exception e)
+            {
+                throw new McpException(e.Message);
+            }
             var json = await res.Content.ReadFromJsonAsync<JwPersonalCourseList>();
             return json;
         }
@@ -72,7 +87,14 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuJw
             req.Content = new FormUrlEncodedContent(forms);
 
             var res = await _client.SendAsync(req);
-            res.EnsureSuccessStatusCode();
+            try
+            {
+                res.EnsureSuccessStatusCode();
+            }
+            catch (Exception e)
+            {
+                throw new McpException(e.Message);
+            }
             var json = await res.Content.ReadFromJsonAsync<JwCourseScoreList>();
             return json;
         }
@@ -116,7 +138,14 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuJw
             req.Content = new FormUrlEncodedContent(forms);
 
             var res = await _client.SendAsync(req);
-            res.EnsureSuccessStatusCode();
+            try
+            {
+                res.EnsureSuccessStatusCode();
+            }
+            catch (Exception e)
+            {
+                throw new McpException(e.Message);
+            }
             var text = await res.Content.ReadAsStringAsync();
             return text.Trim('"');
         }
@@ -134,7 +163,14 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuJw
             req.Content = new FormUrlEncodedContent(forms);
 
             var res = await _client.SendAsync(req);
-            res.EnsureSuccessStatusCode();
+            try
+            {
+                res.EnsureSuccessStatusCode();
+            }
+            catch (Exception e)
+            {
+                throw new McpException(e.Message);
+            }
             var json = await res.Content.ReadFromJsonAsync<JwGpaQueryResult>();
             return json;
         }
@@ -166,7 +202,14 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuJw
             req.Content = new FormUrlEncodedContent(forms);
 
             var res = await _client.SendAsync(req);
-            res.EnsureSuccessStatusCode();
+            try
+            {
+                res.EnsureSuccessStatusCode();
+            }
+            catch (Exception e)
+            {
+                throw new McpException(e.Message);
+            }
             var json = await res.Content.ReadFromJsonAsync<JwExamInfoResult>();
             return json;
         }

@@ -1,9 +1,7 @@
-﻿using ModelContextProtocol.Protocol;
+﻿using ModelContextProtocol;
+using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using SJTUGeek.MCP.Server.Helpers;
-using SJTUGeek.MCP.Server.Tools.SjtuJw;
-using SJTUGeek.MCP.Server.Tools.SjtuMail;
-using System.CommandLine.Parsing;
 using System.ComponentModel;
 
 namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
@@ -61,7 +59,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             // it should be high
             if (matchedMotionInfo.Item1 < 0.9)
             {
-                throw new Exception($"无法匹配运动类型 {room_or_sports_name}，请检查输入是否正确");
+                throw new McpException($"无法匹配运动类型 {room_or_sports_name}，请检查输入是否正确");
             }
 
             //return $"{venue_name} 匹配 {vs[matchedVenueInfo.Item2].VenueName}（可信度：{matchedVenueInfo.Item1}）";
@@ -72,14 +70,14 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             var r = v_info.MotionTypes.FirstOrDefault(x => x.Name == room_or_sports_name);
             if (r == null)
             {
-                throw new Exception($"找不到区域 {r}");
+                throw new McpException($"找不到区域 {r}");
             }
 
             var res35 = await _venue.GetDateInfo();
             var targetDate = res35.FirstOrDefault(x => x.Date == date);
             if (targetDate == null)
             {
-                throw new Exception($"您要预约的日期尚未开放");
+                throw new McpException($"您要预约的日期尚未开放");
             }
 
             bool returnFieldInfo = true;
@@ -91,7 +89,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
                 f = fs.FirstOrDefault(x => x.FieldName == field_name);
                 if (f == null)
                 {
-                    throw new Exception($"找不到场地 {f}");
+                    throw new McpException($"找不到场地 {f}");
                 }
                 returnFieldInfo = false;
             }
@@ -113,7 +111,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             {
                 var hour = t.Hour;
                 if (hour < 7 || hour > 21)
-                    throw new Exception($"无效的时间段：{hour}:00-{hour + 1}:00");
+                    throw new McpException($"无效的时间段：{hour}:00-{hour + 1}:00");
                 if (returnFieldInfo)
                 {
                     fieldAllAvailable = fieldAllAvailable.Zip(fs.Select(x => x.PriceList[hour - 7].Status == "0"), (a, b) => a && b).ToList();

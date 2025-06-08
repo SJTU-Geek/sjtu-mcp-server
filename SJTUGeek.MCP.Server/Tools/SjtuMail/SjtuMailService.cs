@@ -1,4 +1,5 @@
-﻿using SJTUGeek.MCP.Server.Modules;
+﻿using ModelContextProtocol;
+using SJTUGeek.MCP.Server.Modules;
 using System.Net;
 using System.Text.Json;
 using Teru.Code.Zimbra;
@@ -31,10 +32,17 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuMail
             {
                 res = await _client.GetAsync(res.Headers.Location.OriginalString.Replace("http", "https"));
             }
-            res.EnsureSuccessStatusCode();
+            try
+            {
+                res.EnsureSuccessStatusCode();
+            }
+            catch (Exception e)
+            {
+                throw new McpException(e.Message);
+            }
             if (!res.RequestMessage.RequestUri.OriginalString.StartsWith("https://mail.sjtu.edu.cn"))
             {
-                throw new Exception("认证失败");
+                throw new McpException("认证失败");
             }
             var cc = _ccProvider.GetCookieContainer(_cookieProvider.GetCookie());
             var cookies = cc.GetCookies(new Uri("https://mail.sjtu.edu.cn")).Cast<Cookie>().ToList();
@@ -45,7 +53,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuMail
             }
             else
             {
-                throw new Exception("认证失败");
+                throw new McpException("认证失败");
             }
             return true;
         }
@@ -87,7 +95,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuMail
             if (resp.IsFault())
             {
                 var message = resp.GetFaultMessage().First().Value;
-                throw new Exception(message);
+                throw new McpException(message);
             }
             else
             {
@@ -127,7 +135,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuMail
             if (resp.IsFault())
             {
                 var message = resp.GetFaultMessage().First().Value;
-                throw new Exception(message);
+                throw new McpException(message);
             }
             else
             {
@@ -148,7 +156,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuMail
             if (resp.IsFault())
             {
                 var message = resp.GetFaultMessage().First().Value;
-                throw new Exception(message);
+                throw new McpException(message);
             }
             else
             {
@@ -184,7 +192,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuMail
             if (resp.IsFault())
             {
                 var message = resp.GetFaultMessage().First().Value;
-                throw new Exception(message);
+                throw new McpException(message);
             }
             else
             {

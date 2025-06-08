@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ModelContextProtocol;
+using Newtonsoft.Json;
 using SJTUGeek.MCP.Server.Helpers;
 using SJTUGeek.MCP.Server.Modules;
 using System.Text;
@@ -20,26 +21,26 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             var res = await _client.SendAsync(req);
             if (!res.IsSuccessStatusCode)
             {
-                throw new Exception($"请求失败，服务器响应{res.StatusCode}");
+                throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
 
             HttpRequestMessage req2 = new HttpRequestMessage(HttpMethod.Get, "https://sports.sjtu.edu.cn/system/user/currentUser");
             var res2 = await _client.SendAsync(req2);
             if (!res2.IsSuccessStatusCode)
             {
-                throw new Exception($"登录失败，服务器响应{res2.StatusCode}");
+                throw new McpException($"登录失败，服务器响应{res2.StatusCode}");
             }
 
             if (res2.Content.Headers.ContentLength == 0)
             {
-                throw new Exception($"登录失败，服务器返回空");
+                throw new McpException($"登录失败，服务器返回空");
             }
 
             var json2 = JsonConvert.DeserializeObject<VenueResWrapper<VenueUserInfo>>(await res2.Content.ReadAsStringAsync());
 
             if (json2.Code != 0)
             {
-                throw new Exception($"登录失败：{json2.Msg}");
+                throw new McpException($"登录失败：{json2.Msg}");
             }
 
             return json2.Data;
@@ -57,13 +58,13 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             var res = await _client.SendAsync(req);
             if (!res.IsSuccessStatusCode)
             {
-                throw new Exception($"请求失败，服务器响应{res.StatusCode}");
+                throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
 
             var json = JsonConvert.DeserializeObject<VenuePagedResWrapper<VenueItem>>(await res.Content.ReadAsStringAsync());
             if (json.Code != 0)
             {
-                throw new Exception($"请求失败：{json.Msg}");
+                throw new McpException($"请求失败：{json.Msg}");
             }
 
             return json.Rows;
@@ -77,13 +78,13 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             var res = await _client.SendAsync(req);
             if (!res.IsSuccessStatusCode)
             {
-                throw new Exception($"请求失败，服务器响应{res.StatusCode}");
+                throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
 
             var json = JsonConvert.DeserializeObject<List<VenueMotionType>>(await res.Content.ReadAsStringAsync());
             if (json.Count == 0)
             {
-                throw new Exception($"请求失败");
+                throw new McpException($"请求失败");
             }
 
             return json;
@@ -99,13 +100,13 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             var res = await _client.SendAsync(req);
             if (!res.IsSuccessStatusCode)
             {
-                throw new Exception($"请求失败，服务器响应{res.StatusCode}");
+                throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
 
             var json = JsonConvert.DeserializeObject<VenueResWrapper<VenueInfoDto>>(await res.Content.ReadAsStringAsync());
             if (json.Code != 0)
             {
-                throw new Exception($"请求失败：{json.Msg}");
+                throw new McpException($"请求失败：{json.Msg}");
             }
 
             return json.Data;
@@ -127,7 +128,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             var res = await _client.SendAsync(req);
             if (!res.IsSuccessStatusCode)
             {
-                throw new Exception($"请求失败，服务器响应{res.StatusCode}");
+                throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
 
             var body = await res.Content.ReadAsStringAsync();
@@ -136,7 +137,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
 
             if (json.Code != 0)
             {
-                throw new Exception($"请求失败：{json.Msg}");
+                throw new McpException($"请求失败：{json.Msg}");
             }
 
             return json.Data;
@@ -159,13 +160,13 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             var res = await _client.SendAsync(req);
             if (!res.IsSuccessStatusCode)
             {
-                throw new Exception($"请求失败，服务器响应{res.StatusCode}");
+                throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
 
             var json = JsonConvert.DeserializeObject<VenueResWrapper<List<VenueFieldInfo>>>(await res.Content.ReadAsStringAsync());
             if (json.Code != 0)
             {
-                throw new Exception($"请求失败：{json.Msg}");
+                throw new McpException($"请求失败：{json.Msg}");
             }
 
             return json.Data;
@@ -200,7 +201,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             var res = await _client.SendAsync(req);
             if (!res.IsSuccessStatusCode)
             {
-                throw new Exception($"请求失败，服务器响应{res.StatusCode}");
+                throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
             if (res.Content.Headers.ContentType.MediaType == "text/html")
             {
@@ -209,14 +210,14 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
 
                 var cell = document.QuerySelector("div.error-desc");
                 if (cell == null)
-                    throw new Exception($"请求失败，服务器返回非json");
-                throw new Exception(cell.TextContent.Trim());
+                    throw new McpException($"请求失败，服务器返回非json");
+                throw new McpException(cell.TextContent.Trim());
             }
 
             var json = JsonConvert.DeserializeObject<VenueResWrapper<string>>(await res.Content.ReadAsStringAsync());
             if (json.Code != 0)
             {
-                throw new Exception($"请求失败：{json.Msg}");
+                throw new McpException($"请求失败：{json.Msg}");
             }
 
             return json.Data;
@@ -228,13 +229,13 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             var res = _client.SendAsync(req).Result;
             if (!res.IsSuccessStatusCode)
             {
-                throw new Exception($"请求失败，服务器响应{res.StatusCode}");
+                throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
 
             var json = JsonConvert.DeserializeObject<VenueResWrapper<VenueOrderInfo>>(res.Content.ReadAsStringAsync().Result);
             if (json.Code != 0)
             {
-                throw new Exception($"请求失败：{json.Msg}");
+                throw new McpException($"请求失败：{json.Msg}");
             }
 
             return json.Data;
@@ -246,7 +247,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             var res = _client.SendAsync(req).Result;
             if (!res.IsSuccessStatusCode)
             {
-                throw new Exception($"请求失败，服务器响应{res.StatusCode}");
+                throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
 
             var json = JsonConvert.DeserializeObject<VenueOrderListResWrapper>(res.Content.ReadAsStringAsync().Result);
@@ -265,13 +266,13 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             var res = _client.SendAsync(req).Result;
             if (!res.IsSuccessStatusCode)
             {
-                throw new Exception($"请求失败，服务器响应{res.StatusCode}");
+                throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
 
             var json = JsonConvert.DeserializeObject<VenueResWrapper<string>>(res.Content.ReadAsStringAsync().Result);
             if (json.Code != 4)
             {
-                throw new Exception($"请求失败：{json.Msg}");
+                throw new McpException($"请求失败：{json.Msg}");
             }
 
             return true;
@@ -283,13 +284,13 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             var res = _client.SendAsync(req).Result;
             if (!res.IsSuccessStatusCode)
             {
-                throw new Exception($"请求失败，服务器响应{res.StatusCode}");
+                throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
 
             var json = JsonConvert.DeserializeObject<VenueResWrapper<VenueAccompanyListInfo>>(res.Content.ReadAsStringAsync().Result);
             if (json.Code != 0)
             {
-                throw new Exception($"请求失败：{json.Msg}");
+                throw new McpException($"请求失败：{json.Msg}");
             }
 
             return json.Data;
@@ -304,13 +305,13 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             var res = _client.SendAsync(req).Result;
             if (!res.IsSuccessStatusCode)
             {
-                throw new Exception($"请求失败，服务器响应{res.StatusCode}");
+                throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
 
             var json = JsonConvert.DeserializeObject<VenueResWrapper<int>>(res.Content.ReadAsStringAsync().Result);
             if (json.Code != 0)
             {
-                throw new Exception($"请求失败：{json.Msg}");
+                throw new McpException($"请求失败：{json.Msg}");
             }
 
             return json.Data;
