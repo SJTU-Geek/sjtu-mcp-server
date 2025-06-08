@@ -48,6 +48,13 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             var matchedVenueInfo = await _rerank.FindMostRelevant(venue_name, vs.Select(v => v.VenueName).ToList());
             var v = vs[matchedVenueInfo.Item2];
 
+            //if (matchedVenueInfo.Item1 < 0.5)
+            //{
+            //    throw new McpException($"无法匹配场馆 {venue_name}，请检查输入是否正确");
+            //}
+
+            return $"{venue_name} 匹配 {vs[matchedVenueInfo.Item2].VenueName}（可信度：{matchedVenueInfo.Item1}）";
+
             var ms = await _venue.GetMotionTypes();
 
             // add english
@@ -62,7 +69,6 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
                 throw new McpException($"无法匹配运动类型 {room_or_sports_name}，请检查输入是否正确");
             }
 
-            //return $"{venue_name} 匹配 {vs[matchedVenueInfo.Item2].VenueName}（可信度：{matchedVenueInfo.Item1}）";
             //return $"{room_or_sports_name} 匹配 {ms[matchedMotionInfo.Item2].VenueType}（可信度：{matchedMotionInfo.Item1}）";
 
             var v_info = await _venue.GetVenueInfo(v.VenueId);
