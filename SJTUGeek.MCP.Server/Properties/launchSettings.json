@@ -1,14 +1,32 @@
-﻿{
-  "$schema": "https://json.schemastore.org/launchsettings.json",
+{
   "profiles": {
     "http": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": false,
-      "applicationUrl": "http://localhost:5162",
+      "commandLineArgs": "--use-http --pydll=\"python310.dll\" --cookie=\"请填写你的 cookie\"",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5173"
+    },
+    "stdio": {
+      "commandName": "Project",
+      "commandLineArgs": "--pydll=\"python310.dll\" --cookie=\"请填写你的 cookie\"",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5173"
+    },
+    "http-bge-reranker": {
+      "commandName": "Project",
+      "commandLineArgs": "--use-http --pydll=\"python310.dll\" --cookie=\"请填写你的 cookie\" --bge-rerank-model=\"data/bge-reranker-large-q8_0.gguf\"",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5173"
     }
-  }
+  },
+  "$schema": "https://json.schemastore.org/launchsettings.json"
 }
