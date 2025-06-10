@@ -45,6 +45,10 @@
 		<Copy SourceFiles="@(ScriptFiles)" DestinationFolder="$(OutputPath)scripts\%(RecursiveDir)" SkipUnchangedFiles="true" />
 	</Target>
 
+	<Target Name="CopyScripts" AfterTargets="Publish">
+		<Copy SourceFiles="@(ScriptFiles)" DestinationFolder="$(PublishDir)scripts\%(RecursiveDir)" SkipUnchangedFiles="true" />
+	</Target>
+
 	<ItemGroup>
 		<LlamaSharpBackendCpu Include="$(RestorePackagesPath)\llamasharp.backend.cpu\0.24.0\runtimes\**\*.*" />
 		<LlamaSharpBackendCuda12 Include="$(RestorePackagesPath)\llamasharp.backend.cuda12.windows\0.24.0\runtimes\**\*.*" />

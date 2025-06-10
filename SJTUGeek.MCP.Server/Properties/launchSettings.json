@@ -2,7 +2,7 @@
   "profiles": {
     "http": {
       "commandName": "Project",
-      "commandLineArgs": "--use-http --pydll=\"python310.dll\" --cookie=\"请填写你的 cookie\"",
+      "commandLineArgs": "--pydll=\"python310.dll\" --cookie=\"请填写你的 cookie\"",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
@@ -11,7 +11,7 @@
     },
     "stdio": {
       "commandName": "Project",
-      "commandLineArgs": "--pydll=\"python310.dll\" --cookie=\"请填写你的 cookie\"",
+      "commandLineArgs": "--use-stdio --pydll=\"python310.dll\" --cookie=\"请填写你的 cookie\"",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
@@ -20,7 +20,7 @@
     },
     "http-bge-reranker": {
       "commandName": "Project",
-      "commandLineArgs": "--use-http --pydll=\"python310.dll\" --cookie=\"请填写你的 cookie\" --bge-rerank-model=\"data/bge-reranker-large-q8_0.gguf\"",
+      "commandLineArgs": "--pydll=\"python310.dll\" --cookie=\"请填写你的 cookie\" --bge-rerank-model=\"data/bge-reranker-large-q8_0.gguf\"",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

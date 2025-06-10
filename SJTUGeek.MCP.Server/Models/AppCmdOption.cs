@@ -12,7 +12,7 @@ namespace SJTUGeek.MCP.Server.Models
         public string Host { get; set; }
         public string? PythonDll { get; set; }
         public string? JavaScriptEngine { get; set; }
-        public bool EnableHttp { get; set; }
+        public bool EnableStdio { get; set; }
         public string? JaAuthCookie { get; set; }
         public List<string>? EnabledToolGroups { get; set; }
         public string? BgeRerankModel { get; set; }
@@ -25,19 +25,19 @@ namespace SJTUGeek.MCP.Server.Models
         private readonly Option<string> _hostOption;
         private readonly Option<string?> _pyDllOption;
         private readonly Option<string?> _jsEngineOption;
-        private readonly Option<bool> _httpOption;
+        private readonly Option<bool> _stdioOption;
         private readonly Option<string?> _cookieOption;
         private readonly Option<List<string>?> _toolGroupOption;
         private readonly Option<string?> _bgeRerankModelOption;
         private readonly Option<string?> _llmRerankModelOption;
 
-        public AppCmdOptionBinder(Option<int> portOption, Option<string> hostOption, Option<string?> pyDllOption, Option<string?> jsEngineOption, Option<bool> httpOption, Option<string?> cookieOption, Option<List<string>?> toolGroupOption, Option<string?> bgeRerankModelOption, Option<string?> llmRerankModelOption)
+        public AppCmdOptionBinder(Option<int> portOption, Option<string> hostOption, Option<string?> pyDllOption, Option<string?> jsEngineOption, Option<bool> stdioOption, Option<string?> cookieOption, Option<List<string>?> toolGroupOption, Option<string?> bgeRerankModelOption, Option<string?> llmRerankModelOption)
         {
             _portOption = portOption;
             _hostOption = hostOption;
             _pyDllOption = pyDllOption;
             _jsEngineOption = jsEngineOption;
-            _httpOption = httpOption;
+            _stdioOption = stdioOption;
             _cookieOption = cookieOption;
             _toolGroupOption = toolGroupOption;
             _bgeRerankModelOption = bgeRerankModelOption;
@@ -57,7 +57,7 @@ namespace SJTUGeek.MCP.Server.Models
                 Host = bindingContext.ParseResult.GetValueForOption(_hostOption),
                 PythonDll = bindingContext.ParseResult.GetValueForOption(_pyDllOption),
                 JavaScriptEngine = bindingContext.ParseResult.GetValueForOption(_jsEngineOption),
-                EnableHttp = bindingContext.ParseResult.GetValueForOption(_httpOption),
+                EnableStdio = bindingContext.ParseResult.GetValueForOption(_stdioOption),
                 JaAuthCookie = bindingContext.ParseResult.GetValueForOption(_cookieOption),
                 EnabledToolGroups = bindingContext.ParseResult.GetValueForOption(_toolGroupOption),
                 BgeRerankModel = bindingContext.ParseResult.GetValueForOption(_bgeRerankModelOption),

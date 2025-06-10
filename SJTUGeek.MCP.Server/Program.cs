@@ -35,8 +35,8 @@ namespace SJTUGeek.MCP.Server
                 getDefaultValue: () => null,
                 description: "指定 JavaScript 脚本运行环境，只能填写“V8”。若不填写，则禁用 JavaScript 脚本。"
             );
-            var httpOption = new Option<bool>(
-                aliases: new string[] { "--use-http" },
+            var stdioOption = new Option<bool>(
+                aliases: new string[] { "--use-stdio" },
                 getDefaultValue: () => false,
                 description: "指定 MCP 服务器是否使用 SSE 或者 Streamable HTTP 方式进行交互，若 true，则启用 HTTP 服务，否则使用 stdio 方式。"
             );
@@ -65,7 +65,7 @@ namespace SJTUGeek.MCP.Server
             rootCommand.AddOption(hostOption);
             rootCommand.AddOption(pyDllOption);
             rootCommand.AddOption(jsEngineOption);
-            rootCommand.AddOption(httpOption);
+            rootCommand.AddOption(stdioOption);
             rootCommand.AddOption(cookieOption);
             rootCommand.AddOption(toolGroupOption);
             rootCommand.AddOption(bgeRerankModelOption);
@@ -79,7 +79,7 @@ namespace SJTUGeek.MCP.Server
                 hostOption,
                 pyDllOption,
                 jsEngineOption,
-                httpOption,
+                stdioOption,
                 cookieOption,
                 toolGroupOption,
                 bgeRerankModelOption,
@@ -105,10 +105,10 @@ namespace SJTUGeek.MCP.Server
                 PythonEngine.BeginAllowThreads();
             }
 
-            if (appOptions.EnableHttp)
-                RunHttpApp(appOptions);
-            else
+            if (appOptions.EnableStdio)
                 RunStdioApp(appOptions);
+            else
+                RunHttpApp(appOptions);
         }
 
         public static void RunHttpApp(AppCmdOption appOptions)
