@@ -35,10 +35,10 @@ namespace SJTUGeek.MCP.Server
                 getDefaultValue: () => null,
                 description: "指定 JavaScript 脚本运行环境，只能填写“V8”。若不填写，则禁用 JavaScript 脚本。"
             );
-            var sseOption = new Option<bool>(
-                aliases: new string[] { "--sse" },
-                getDefaultValue: () => true,
-                description: "指定 MCP 服务器是否使用 SSE 方式进行交互，若 true，则使用 SSE 方式，否则使用 stdio 方式。"
+            var httpOption = new Option<bool>(
+                aliases: new string[] { "--use-http" },
+                getDefaultValue: () => false,
+                description: "指定 MCP 服务器是否使用 SSE 或者 Streamable HTTP 方式进行交互，若 true，则启用 HTTP 服务，否则使用 stdio 方式。"
             );
             var cookieOption = new Option<string?>(
                 aliases: new string[] { "--cookie", "-C" },
@@ -65,7 +65,7 @@ namespace SJTUGeek.MCP.Server
             rootCommand.AddOption(hostOption);
             rootCommand.AddOption(pyDllOption);
             rootCommand.AddOption(jsEngineOption);
-            rootCommand.AddOption(sseOption);
+            rootCommand.AddOption(httpOption);
             rootCommand.AddOption(cookieOption);
             rootCommand.AddOption(toolGroupOption);
             rootCommand.AddOption(bgeRerankModelOption);
@@ -79,7 +79,7 @@ namespace SJTUGeek.MCP.Server
                 hostOption,
                 pyDllOption,
                 jsEngineOption,
-                sseOption,
+                httpOption,
                 cookieOption,
                 toolGroupOption,
                 bgeRerankModelOption,
@@ -104,9 +104,38 @@ namespace SJTUGeek.MCP.Server
                 PythonEngine.Initialize();
                 PythonEngine.BeginAllowThreads();
             }
-            
+
+            if (appOptions.EnableHttp)
+                RunHttpApp(appOptions);
+            else
+                RunStdioApp(appOptions);
+        }
+
+        public static void RunHttpApp(AppCmdOption appOptions)
+        {
             var builder = WebApplication.CreateBuilder();
 
+            var mcpServerBuilder = builder.Services
+                .AddMcpServer(McpScriptBuilderExtensions.ConfigureMcpOptions)
+                .WithHttpTransport()
+                .WithToolsFromCurrentAssembly()
+                ;
+
+            builder.Services.AddHttpContextAccessor();
+            AddMcpServices(builder.Services);
+            builder.WebHost.UseUrls($"http://{appOptions.Host}:{appOptions.Port}");
+            builder.Services.AddSingleton<Func<LoggingLevel>>(_ => () => LoggingLevel.Debug);
+
+            var app = builder.Build();
+
+            app.MapMcp();
+            app.UseMiddleware<AuthMiddleware>();
+            app.Run();
+        }
+
+        public static void RunStdioApp(AppCmdOption appOptions)
+        {
+            var builder = Host.CreateApplicationBuilder();
             builder.Logging.AddConsole(consoleLogOptions =>
             {
                 // Configure all logs to go to stderr
@@ -115,44 +144,31 @@ namespace SJTUGeek.MCP.Server
 
             var mcpServerBuilder = builder.Services
                 .AddMcpServer(McpScriptBuilderExtensions.ConfigureMcpOptions)
-                .WithHttpTransport()
+                .WithStdioServerTransport()
                 .WithToolsFromCurrentAssembly()
-                //.WithTools<AddTool>()
-                //.WithTools<TestTool>()
                 ;
-            if (!appOptions.EnableSse)
-                mcpServerBuilder.WithStdioServerTransport();
 
-            //builder.Services.AddMcpScripts();
-
-            builder.Services.AddMemoryCache(); // Singleton
-            builder.Services.AddHttpContextAccessor();
-
-            builder.Services.AddScoped<JaCookieProvider>();
-            builder.Services.AddSingleton<CookieContainerProvider>();
-            builder.Services.AddScoped<HttpClientFactory>();
-            builder.Services.AddSingleton<MemoryCacheWrapper>();
-
-            builder.Services.AddScoped<SjtuMailService>();
-            builder.Services.AddScoped<SjtuJwService>();
-            builder.Services.AddScoped<SjtuVenueService>();
-
-            builder.Services.AddSingleton<RerankHelper>();
-
-            builder.WebHost.UseUrls($"http://{appOptions.Host}:{appOptions.Port}");
-
-            //builder.Services.AddControllers();
-
+            AddMcpServices(builder.Services);
             builder.Services.AddSingleton<Func<LoggingLevel>>(_ => () => LoggingLevel.Debug);
 
             var app = builder.Build();
-
-            //app.UseAuthorization();
-            //app.MapControllers();
-            if (appOptions.EnableSse)
-                app.MapMcp();
-            app.UseMiddleware<AuthMiddleware>();
             app.Run();
+        }
+
+        public static void AddMcpServices(IServiceCollection services)
+        {
+            services.AddMemoryCache(); // Singleton
+
+            services.AddScoped<JaCookieProvider>();
+            services.AddSingleton<CookieContainerProvider>();
+            services.AddScoped<HttpClientFactory>();
+            services.AddSingleton<MemoryCacheWrapper>();
+
+            services.AddScoped<SjtuMailService>();
+            services.AddScoped<SjtuJwService>();
+            services.AddScoped<SjtuVenueService>();
+
+            services.AddSingleton<RerankHelper>();
         }
     }
 }
