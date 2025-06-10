@@ -2,8 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
+	<Platforms>AnyCPU;ARM64;x86;x64</Platforms>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>sjtu-mcp.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,6 +30,10 @@
 
 	<ItemGroup>
 		<ScriptFiles Include="../SJTUGeek.MCP.Scripts/scripts/**/*" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="sjtu-mcp.ico" />
 	</ItemGroup>
 
 	<ItemGroup>
