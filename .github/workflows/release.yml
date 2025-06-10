@@ -31,6 +31,9 @@ jobs:
         with:
           dotnet-version: 9.0
 
+      - name: Fix Nuget
+        run: rm mcp-csharp-sdk/nuget.config
+
       - name: Build App
         run: |
           if [ "${{ matrix.deploy_mode }}" == "with-runtime" ]; then

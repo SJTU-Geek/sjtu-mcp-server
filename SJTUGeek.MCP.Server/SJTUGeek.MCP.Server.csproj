@@ -44,4 +44,22 @@
 		<Copy SourceFiles="@(ScriptFiles)" DestinationFolder="$(OutputPath)scripts\%(RecursiveDir)" SkipUnchangedFiles="true" />
 	</Target>
 
+	<ItemGroup>
+		<LlamaSharpBackendCpu Include="$(RestorePackagesPath)\llamasharp.backend.cpu\0.24.0\runtimes\**\*.*" />
+		<LlamaSharpBackendCuda12 Include="$(RestorePackagesPath)\llamasharp.backend.cuda12.windows\0.24.0\runtimes\**\*.*" />
+		<LlamaSharpBackendVulkan Include="$(RestorePackagesPath)\llamasharp.backend.vulkan.windows\0.24.0\runtimes\**\*.*" />
+	</ItemGroup>
+	<Target Name="CopyRuntimesFolderOnPublish" AfterTargets="Publish">
+		<Delete Files="$(PublishDir)llama.dll" />
+		<Delete Files="$(PublishDir)llava_shared.dll" />
+		<Delete Files="$(PublishDir)ggml.dll" />
+		<Delete Files="$(PublishDir)ggml-base.dll" />
+		<Delete Files="$(PublishDir)ggml-cpu.dll" />
+		<Delete Files="$(PublishDir)ggml-vulkan.dll" />
+		<Delete Files="$(PublishDir)ggml-cuda.dll" />
+		<Copy SourceFiles="@(LlamaSharpBackendCpu)" DestinationFolder="$(PublishDir)\runtimes\%(RecursiveDir)" />
+		<Copy SourceFiles="@(LlamaSharpBackendCuda12)" DestinationFolder="$(PublishDir)\runtimes\%(RecursiveDir)" />
+		<Copy SourceFiles="@(LlamaSharpBackendVulkan)" DestinationFolder="$(PublishDir)\runtimes\%(RecursiveDir)" />
+	</Target>
+
 </Project>
