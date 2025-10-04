@@ -7,6 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>sjtu-mcp.ico</ApplicationIcon>
 	<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+	<PublishAot>true</PublishAot>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,7 +15,6 @@
     <PackageReference Include="LLamaSharp" Version="0.24.0" />
     <PackageReference Include="LLamaSharp.Backend.Cpu" Version="0.24.0" />
     <PackageReference Include="Microsoft.Extensions.AI.Abstractions" Version="9.9.1" />
-    <PackageReference Include="pythonnet" Version="3.0.5" />
     <PackageReference Include="ReverseMarkdown" Version="4.7.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.9" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.1.6" />
@@ -39,6 +39,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Controllers\" />
+	  <Folder Include="Modules\Mcp\" />
 	</ItemGroup>
 
 	<Target Name="CopyScripts" AfterTargets="Build">

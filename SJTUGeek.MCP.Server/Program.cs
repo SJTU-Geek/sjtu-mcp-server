@@ -1,5 +1,4 @@
 using ModelContextProtocol.Protocol;
-using Python.Runtime;
 using SJTUGeek.MCP.Server.Extensions;
 using SJTUGeek.MCP.Server.Helpers;
 using SJTUGeek.MCP.Server.Models;
@@ -24,16 +23,6 @@ namespace SJTUGeek.MCP.Server
                 aliases: new string[] { "--host", "-h" },
                 getDefaultValue: () => "localhost",
                 description: "指定 SSE 服务监听的主机名或 IP 地址。"
-            );
-            var pyDllOption = new Option<string?>(
-                aliases: new string[] { "--pydll" },
-                getDefaultValue: () => null,
-                description: "指定 Python 脚本运行环境的库文件（必须在 PATH 环境变量指定的目录下），例如 python310.dll。若不填写，则禁用 Python 脚本。"
-            );
-            var jsEngineOption = new Option<string?>(
-                aliases: new string[] { "--jsengine" },
-                getDefaultValue: () => null,
-                description: "指定 JavaScript 脚本运行环境，只能填写“V8”。若不填写，则禁用 JavaScript 脚本。"
             );
             var stdioOption = new Option<bool>(
                 aliases: new string[] { "--use-stdio" },
@@ -63,8 +52,6 @@ namespace SJTUGeek.MCP.Server
             var rootCommand = new RootCommand("Welcome to SJTUGeek.MCP!");
             rootCommand.AddOption(portOption);
             rootCommand.AddOption(hostOption);
-            rootCommand.AddOption(pyDllOption);
-            rootCommand.AddOption(jsEngineOption);
             rootCommand.AddOption(stdioOption);
             rootCommand.AddOption(cookieOption);
             rootCommand.AddOption(toolGroupOption);
@@ -77,8 +64,6 @@ namespace SJTUGeek.MCP.Server
             }, new AppCmdOptionBinder(
                 portOption,
                 hostOption,
-                pyDllOption,
-                jsEngineOption,
                 stdioOption,
                 cookieOption,
                 toolGroupOption,
@@ -98,13 +83,6 @@ namespace SJTUGeek.MCP.Server
             //}
             AppCmdOption.Default = appOptions;
 
-            if (appOptions.PythonDll != null)
-            {
-                Runtime.PythonDLL = appOptions.PythonDll;
-                PythonEngine.Initialize();
-                PythonEngine.BeginAllowThreads();
-            }
-
             if (appOptions.EnableStdio)
                 RunStdioApp(appOptions);
             else
@@ -118,7 +96,7 @@ namespace SJTUGeek.MCP.Server
             var mcpServerBuilder = builder.Services
                 .AddMcpServer(McpScriptBuilderExtensions.ConfigureMcpOptions)
                 .WithHttpTransport()
-                .WithToolsFromCurrentAssembly()
+                .WithAllMyTools()
                 ;
 
             builder.Services.AddHttpContextAccessor();
@@ -145,7 +123,7 @@ namespace SJTUGeek.MCP.Server
             var mcpServerBuilder = builder.Services
                 .AddMcpServer(McpScriptBuilderExtensions.ConfigureMcpOptions)
                 .WithStdioServerTransport()
-                .WithToolsFromCurrentAssembly()
+                .WithAllMyTools()
                 ;
 
             AddMcpServices(builder.Services);

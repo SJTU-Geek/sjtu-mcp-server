@@ -10,11 +10,11 @@ namespace SJTUGeek.MCP.Server.StaticTools;
 public class TestTool
 {
     [McpServerTool(Name = "test"), Description("Test system.")]
-    public static CallToolResponse Test(RequestContext<CallToolRequestParams> context)
+    public static CallToolResult Test(RequestContext<CallToolRequestParams> context)
     {
         byte[] bytes = File.ReadAllBytes(@"C:\Users\teru\Downloads\test_img.jpg");
-        return new CallToolResponse() { IsError = false, Content = new List<Content>() { 
-            new Content() { Text = "场景1" } ,
+        return new CallToolResult() { IsError = false, Content = new List<ContentBlock>() { 
+            new TextContentBlock() { Text = "场景1" } ,
             new DataContent(bytes, "image/png").ToContent(),
         } };
     }
