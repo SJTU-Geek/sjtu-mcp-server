@@ -119,10 +119,10 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             {
                 if (fieldAllAvailable.All(x => x == false))
                 {
-                    return new CallToolResponse() { IsError = false, Content = new List<Content>() { new Content() { Text = $"请补全场地信息！（为您查询到 {v.VenueName} {m.VenueType} 所有场地在指定时段均无法预约，请您更换时间）" } } };
+                    return new CallToolResult() { IsError = false, Content = new List<ContentBlock>() { new TextContentBlock() { Text = $"请补全场地信息！（为您查询到 {v.VenueName} {m.VenueType} 所有场地在指定时段均无法预约，请您更换时间）" } } };
                 }
                 var fieldAllAvailableStr = string.Join("、", fs.Zip(fieldAllAvailable).Where(x => x.Second).Select(x => x.First.FieldName));
-                return new CallToolResponse() { IsError = false, Content = new List<Content>() { new Content() { Text = $"请补全场地信息！（为您查询到 {v.VenueName} {m.VenueType} 的 {fieldAllAvailableStr} 在指定时段空闲）" } } };
+                return new CallToolResult() { IsError = false, Content = new List<ContentBlock>() { new TextContentBlock() { Text = $"请补全场地信息！（为您查询到 {v.VenueName} {m.VenueType} 的 {fieldAllAvailableStr} 在指定时段空闲）" } } };
             }
             else
             {
@@ -216,10 +216,10 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             Image<Rgba32> image = new(100, 100);
             image.Mutate(ctx => ctx.Fill(Color.Coral));
             await image.SaveAsPngAsync(ms);
-            return new CallToolResponse() {
+            return new CallToolResult() {
                 IsError = false,
-                Content = new List<Content>() {
-                    new Content() { Text = $"{targetDate.Date} 的 {v.VenueName} {m.VenueType} 场地状态图" } ,
+                Content = new List<ContentBlock>() {
+                    new TextContentBlock() { Text = $"{targetDate.Date} 的 {v.VenueName} {m.VenueType} 场地状态图" } ,
                     new DataContent(ms.ToArray(), "image/png").ToContent(),
                 }
             };
@@ -242,11 +242,11 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             var res = await _venue.CancelOrder(order_id);
             if (res)
             {
-                return new CallToolResponse() { IsError = false, Content = new List<Content>() { new Content() { Text = "订单取消成功" } } };
+                return new CallToolResult() { IsError = false, Content = new List<ContentBlock>() { new TextContentBlock() { Text = "订单取消成功" } } };
             }
             else
             {
-                return new CallToolResponse() { IsError = true, Content = new List<Content>() { new Content() { Text = $"订单取消失败" } } };
+                return new CallToolResult() { IsError = true, Content = new List<ContentBlock>() { new TextContentBlock() { Text = $"订单取消失败" } } };
             }
         }
 

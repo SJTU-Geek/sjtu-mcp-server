@@ -69,8 +69,10 @@ public class McpScriptServerTool : McpServerTool
     /// <inheritdoc />
     public override Tool ProtocolTool { get; }
 
+    public override IReadOnlyList<object> Metadata => [];
+
     /// <inheritdoc />
-    public override async ValueTask<CallToolResponse> InvokeAsync(
+    public override async ValueTask<CallToolResult> InvokeAsync(
         RequestContext<CallToolRequestParams> request, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -155,10 +157,10 @@ public class McpScriptServerTool : McpServerTool
                         if (callResult.GetItem(0).As<bool>() == false)
                         {
                             var errMessage = callResult.GetItem(1).As<string>();
-                            return new CallToolResponse()
+                            return new CallToolResult()
                             {
                                 IsError = true,
-                                Content = [new() { Text = errMessage, Type = "text" }],
+                                Content = [new TextContentBlock() { Text = errMessage, Type = "text" }],
                             }; 
                         }
                         callResult = callResult.GetItem(1);
@@ -182,24 +184,24 @@ public class McpScriptServerTool : McpServerTool
         }
         catch (PythonException ex)
         {
-            return new CallToolResponse()
+            return new CallToolResult()
             {
                 IsError = true,
-                Content = [new() { Text = ex.Message, Type = "text" }],
+                Content = [new TextContentBlock() { Text = ex.Message, Type = "text" }],
             };
         }
         catch (Exception e) when (e is not OperationCanceledException)
         {
-            return new CallToolResponse()
+            return new CallToolResult()
             {
                 IsError = true,
-                Content = [new() { Text = $"An error occurred invoking '{request.Params?.Name}'.", Type = "text" }],
+                Content = [new TextContentBlock() { Text = $"An error occurred invoking '{request.Params?.Name}'.", Type = "text" }],
             };
         }
 
         return result switch
         {
-            JsonElement json => ConvertJsonElementToCallToolResponse(json),
+            JsonElement json => ConvertJsonElementToCallToolResult(json),
             null => new()
             {
                 Content = []
@@ -207,7 +209,7 @@ public class McpScriptServerTool : McpServerTool
 
             string text => new()
             {
-                Content = [new() { Text = text, Type = "text" }]
+                Content = [new TextContentBlock() { Text = text, Type = "text" }]
             },
 
             //Content content => new()
@@ -225,11 +227,11 @@ public class McpScriptServerTool : McpServerTool
             //    Content = [.. contents]
             //},
 
-            CallToolResponse callToolResponse => callToolResponse,
+            CallToolResult CallToolResult => CallToolResult,
 
             _ => new()
             {
-                Content = [new()
+                Content = [new TextContentBlock()
                 {
                     Text = JsonSerializer.Serialize(result, McpJsonUtilities.DefaultOptions.GetTypeInfo(typeof(object))),
                     Type = "text"
@@ -238,23 +240,23 @@ public class McpScriptServerTool : McpServerTool
         };
     }
 
-    private CallToolResponse ConvertJsonElementToCallToolResponse(JsonElement json)
+    private CallToolResult ConvertJsonElementToCallToolResult(JsonElement json)
     {
         if (json.ValueKind == JsonValueKind.Number)
             return new()
             {
-                Content = [new() { Text = json.ToString(), Type = "text" }]
+                Content = [new TextContentBlock() { Text = json.ToString(), Type = "text" }]
             };
         else if (json.ValueKind == JsonValueKind.String)
             return new()
             {
-                Content = [new() { Text = json.ToString(), Type = "text" }]
+                Content = [new TextContentBlock() { Text = json.ToString(), Type = "text" }]
             };
         else
         {
             return new()
             {
-                Content = [new()
+                Content = [new TextContentBlock()
                 {
                     Text = JsonSerializer.Serialize(json, McpJsonUtilities.DefaultOptions.GetTypeInfo(typeof(object))),
                     Type = "text"

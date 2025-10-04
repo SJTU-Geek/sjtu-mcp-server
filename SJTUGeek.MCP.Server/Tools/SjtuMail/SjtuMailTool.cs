@@ -29,7 +29,7 @@ namespace SJTUGeek.MCP.Server.Tools
             await _mail.Login();
             var mails = await _mail.GetMails(mailbox, page);
             if (mails.M == null || mails.M.Length == 0)
-                return new CallToolResponse() { IsError = false, Content = new List<Content>() { new Content() { Text = "找不到邮件！" } } };
+                return new CallToolResult() { IsError = false, Content = new List<ContentBlock>() { new TextContentBlock() { Text = "找不到邮件！" } } };
             var res = RenderMailList(mails);
             return res;
         }
@@ -43,7 +43,7 @@ namespace SJTUGeek.MCP.Server.Tools
             await _mail.Login();
             var mail = await _mail.GetSingleMail(mailId, false);
             if (mail.M == null)
-                return new CallToolResponse() { IsError = false, Content = new List<Content>() { new Content() { Text = "找不到邮件！" } } };
+                return new CallToolResult() { IsError = false, Content = new List<ContentBlock>() { new TextContentBlock() { Text = "找不到邮件！" } } };
             var res = RenderSingleMail(mail.M.First());
             return res;
         }
@@ -57,7 +57,7 @@ namespace SJTUGeek.MCP.Server.Tools
             await _mail.Login();
             var mail = await _mail.GetSingleMail(mailId, true);
             if (mail.M == null)
-                return new CallToolResponse() { IsError = false, Content = new List<Content>() { new Content() { Text = "找不到邮件！" } } };
+                return new CallToolResult() { IsError = false, Content = new List<ContentBlock>() { new TextContentBlock() { Text = "找不到邮件！" } } };
             return "标记成功！";
         }
 

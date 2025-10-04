@@ -26,7 +26,7 @@ public class SjtuJwTool
         await _jw.Login();
         var courses = await _jw.GetPersonalCourseTable(semester);
         if (courses.KbList.Length == 0)
-            return new CallToolResponse() { IsError = false, Content = new List<Content>() { new Content() { Text = "指定的学期没有课程！" } } };
+            return new CallToolResult() { IsError = false, Content = new List<ContentBlock>() { new TextContentBlock() { Text = "指定的学期没有课程！" } } };
         var res = RenderPersonalCourseTable(courses);
         return res;
     }
@@ -40,7 +40,7 @@ public class SjtuJwTool
         await _jw.Login();
         var scores = await _jw.GetCourseScoreList(semester);
         if (scores.Items.Length == 0)
-            return new CallToolResponse() { IsError = false, Content = new List<Content>() { new Content() { Text = "找不到数据，可能是成绩还没有出哦~" } } };
+            return new CallToolResult() { IsError = false, Content = new List<ContentBlock>() { new TextContentBlock() { Text = "找不到数据，可能是成绩还没有出哦~" } } };
         var res = RenderCourseScoreList(scores);
         return res;
     }
@@ -58,10 +58,10 @@ public class SjtuJwTool
         await _jw.Login();
         var tj = await _jw.RequestGpaTj(start_semester, end_semester, type);
         if (!tj.StartsWith("统计成功"))
-            return new CallToolResponse() { IsError = true, Content = new List<Content>() { new Content() { Text = "统计失败！" } } };
+            return new CallToolResult() { IsError = true, Content = new List<ContentBlock>() { new TextContentBlock() { Text = "统计失败！" } } };
         var stat = await _jw.GetGpaTjResult();
         if (stat.Items.Length == 0)
-            return new CallToolResponse() { IsError = true, Content = new List<Content>() { new Content() { Text = "找不到数据，请检查统计范围！" } } };
+            return new CallToolResult() { IsError = true, Content = new List<ContentBlock>() { new TextContentBlock() { Text = "找不到数据，请检查统计范围！" } } };
         var res = RenderGrades(stat.Items[0]);
         return res;
     }
@@ -75,7 +75,7 @@ public class SjtuJwTool
         await _jw.Login();
         var exams = await _jw.GetExamInfo(semester);
         if (exams.Items.Length == 0)
-            return new CallToolResponse() { IsError = false, Content = new List<Content>() { new Content() { Text = "找不到数据，可能是考试安排还没有出哦~" } } };
+            return new CallToolResult() { IsError = false, Content = new List<ContentBlock>() { new TextContentBlock() { Text = "找不到数据，可能是考试安排还没有出哦~" } } };
         var res = RenderExamInfoList(exams);
         return res;
     }

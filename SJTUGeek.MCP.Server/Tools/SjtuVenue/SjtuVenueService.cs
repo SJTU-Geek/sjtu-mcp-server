@@ -1,8 +1,8 @@
 ﻿using ModelContextProtocol;
-using Newtonsoft.Json;
 using SJTUGeek.MCP.Server.Helpers;
 using SJTUGeek.MCP.Server.Modules;
 using System.Text;
+using System.Text.Json;
 
 namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
 {
@@ -36,7 +36,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
                 throw new McpException($"登录失败，服务器返回空");
             }
 
-            var json2 = JsonConvert.DeserializeObject<VenueResWrapper<VenueUserInfo>>(await res2.Content.ReadAsStringAsync());
+            var json2 = JsonSerializer.Deserialize<VenueResWrapper<VenueUserInfo>>(await res2.Content.ReadAsStringAsync());
 
             if (json2.Code != 0)
             {
@@ -61,7 +61,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
                 throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
 
-            var json = JsonConvert.DeserializeObject<VenuePagedResWrapper<VenueItem>>(await res.Content.ReadAsStringAsync());
+            var json = JsonSerializer.Deserialize<VenuePagedResWrapper<VenueItem>>(await res.Content.ReadAsStringAsync());
             if (json.Code != 0)
             {
                 throw new McpException($"请求失败：{json.Msg}");
@@ -81,7 +81,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
                 throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
 
-            var json = JsonConvert.DeserializeObject<List<VenueMotionType>>(await res.Content.ReadAsStringAsync());
+            var json = JsonSerializer.Deserialize<List<VenueMotionType>>(await res.Content.ReadAsStringAsync());
             if (json.Count == 0)
             {
                 throw new McpException($"请求失败");
@@ -103,7 +103,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
                 throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
 
-            var json = JsonConvert.DeserializeObject<VenueResWrapper<VenueInfoDto>>(await res.Content.ReadAsStringAsync());
+            var json = JsonSerializer.Deserialize<VenueResWrapper<VenueInfoDto>>(await res.Content.ReadAsStringAsync());
             if (json.Code != 0)
             {
                 throw new McpException($"请求失败：{json.Msg}");
@@ -133,7 +133,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
 
             var body = await res.Content.ReadAsStringAsync();
 
-            var json = JsonConvert.DeserializeObject<VenueResWrapper<List<VenueDateInfo>>>(body);
+            var json = JsonSerializer.Deserialize<VenueResWrapper<List<VenueDateInfo>>>(body);
 
             if (json.Code != 0)
             {
@@ -163,7 +163,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
                 throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
 
-            var json = JsonConvert.DeserializeObject<VenueResWrapper<List<VenueFieldInfo>>>(await res.Content.ReadAsStringAsync());
+            var json = JsonSerializer.Deserialize<VenueResWrapper<List<VenueFieldInfo>>>(await res.Content.ReadAsStringAsync());
             if (json.Code != 0)
             {
                 throw new McpException($"请求失败：{json.Msg}");
@@ -174,7 +174,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
 
         public async Task<string> Reserve(VenueOrderInput input)
         {
-            var jsonstr = JsonConvert.SerializeObject(input);
+            var jsonstr = JsonSerializer.Serialize(input);
             var jsonenc = AesHelper.Encrypt(
                 jsonstr, 
                 Encoding.Default.GetBytes(SjtuVenueHelper.AESKey),
@@ -214,7 +214,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
                 throw new McpException(cell.TextContent.Trim());
             }
 
-            var json = JsonConvert.DeserializeObject<VenueResWrapper<string>>(await res.Content.ReadAsStringAsync());
+            var json = JsonSerializer.Deserialize<VenueResWrapper<string>>(await res.Content.ReadAsStringAsync());
             if (json.Code != 0)
             {
                 throw new McpException($"请求失败：{json.Msg}");
@@ -232,7 +232,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
                 throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
 
-            var json = JsonConvert.DeserializeObject<VenueResWrapper<VenueOrderInfo>>(res.Content.ReadAsStringAsync().Result);
+            var json = JsonSerializer.Deserialize<VenueResWrapper<VenueOrderInfo>>(res.Content.ReadAsStringAsync().Result);
             if (json.Code != 0)
             {
                 throw new McpException($"请求失败：{json.Msg}");
@@ -250,7 +250,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
                 throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
 
-            var json = JsonConvert.DeserializeObject<VenueOrderListResWrapper>(await res.Content.ReadAsStringAsync());
+            var json = JsonSerializer.Deserialize<VenueOrderListResWrapper>(await res.Content.ReadAsStringAsync());
 
             return json.Records;
         }        
@@ -269,7 +269,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
                 throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
 
-            var json = JsonConvert.DeserializeObject<VenueResWrapper<string>>(await res.Content.ReadAsStringAsync());
+            var json = JsonSerializer.Deserialize<VenueResWrapper<string>>(await res.Content.ReadAsStringAsync());
             if (json.Code != 4)
             {
                 throw new McpException($"{json.Msg}");
@@ -287,7 +287,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
                 throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
 
-            var json = JsonConvert.DeserializeObject<VenueResWrapper<VenueAccompanyListInfo>>(res.Content.ReadAsStringAsync().Result);
+            var json = JsonSerializer.Deserialize<VenueResWrapper<VenueAccompanyListInfo>>(res.Content.ReadAsStringAsync().Result);
             if (json.Code != 0)
             {
                 throw new McpException($"请求失败：{json.Msg}");
@@ -299,7 +299,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
         public int SaveAccompanies(VenueAccompanySaveInput input)
         {
             HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, "https://sports.sjtu.edu.cn/venue/personal/saveAccompanyingOrders");
-            var jsoninput = JsonConvert.SerializeObject(input);
+            var jsoninput = JsonSerializer.Serialize(input);
             req.Content = new StringContent(jsoninput);
             req.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
             var res = _client.SendAsync(req).Result;
@@ -308,7 +308,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
                 throw new McpException($"请求失败，服务器响应{res.StatusCode}");
             }
 
-            var json = JsonConvert.DeserializeObject<VenueResWrapper<int>>(res.Content.ReadAsStringAsync().Result);
+            var json = JsonSerializer.Deserialize<VenueResWrapper<int>>(res.Content.ReadAsStringAsync().Result);
             if (json.Code != 0)
             {
                 throw new McpException($"请求失败：{json.Msg}");

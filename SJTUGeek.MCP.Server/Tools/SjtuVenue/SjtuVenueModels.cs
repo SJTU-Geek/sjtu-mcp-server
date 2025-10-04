@@ -1,724 +1,725 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
 {
     public partial class VenueResWrapper<T>
     {
-        [JsonProperty("code")]
+        [JsonPropertyName("code")]
         public long Code { get; set; }
 
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public T Data { get; set; }
 
-        [JsonProperty("msg")]
+        [JsonPropertyName("msg")]
         public string Msg { get; set; }
     }
 
     public partial class VenuePagedResWrapper<T>
     {
-        [JsonProperty("code")]
+        [JsonPropertyName("code")]
         public long Code { get; set; }
 
-        [JsonProperty("msg")]
+        [JsonPropertyName("msg")]
         public long Msg { get; set; }
 
-        [JsonProperty("rows")]
+        [JsonPropertyName("rows")]
         public List<T> Rows { get; set; }
 
-        [JsonProperty("total")]
+        [JsonPropertyName("total")]
         public long Total { get; set; }
     }
 
     public partial class VenueOrderListResWrapper
     {
-        [JsonProperty("current")]
+        [JsonPropertyName("current")]
         public long Current { get; set; }
 
-        [JsonProperty("hitCount")]
+        [JsonPropertyName("hitCount")]
         public bool HitCount { get; set; }
 
-        [JsonProperty("optimizeCountSql")]
+        [JsonPropertyName("optimizeCountSql")]
         public bool OptimizeCountSql { get; set; }
 
-        [JsonProperty("orders")]
+        [JsonPropertyName("orders")]
         public List<string> Orders { get; set; }
 
-        [JsonProperty("pages")]
+        [JsonPropertyName("pages")]
         public long Pages { get; set; }
 
-        [JsonProperty("records")]
+        [JsonPropertyName("records")]
         public List<VenueOrderInfo> Records { get; set; }
 
-        [JsonProperty("searchCount")]
+        [JsonPropertyName("searchCount")]
         public bool SearchCount { get; set; }
 
-        [JsonProperty("size")]
+        [JsonPropertyName("size")]
         public long Size { get; set; }
 
-        [JsonProperty("total")]
+        [JsonPropertyName("total")]
         public long Total { get; set; }
     }
 
     public partial class VenueUserInfo
     {
-        [JsonProperty("admin")]
+        [JsonPropertyName("admin")]
         public bool Admin { get; set; }
 
-        [JsonProperty("avatar")]
+        [JsonPropertyName("avatar")]
         public string Avatar { get; set; }
 
-        [JsonProperty("balance")]
+        [JsonPropertyName("balance")]
         public string Balance { get; set; }
 
-        [JsonProperty("classNo")]
+        [JsonPropertyName("classNo")]
         public string ClassNo { get; set; }
 
-        [JsonProperty("code")]
+        [JsonPropertyName("code")]
         public string Code { get; set; }
 
-        [JsonProperty("createTime")]
+        [JsonPropertyName("createTime")]
         public string CreateTime { get; set; }
 
-        [JsonProperty("delFlag")]
+        [JsonPropertyName("delFlag")]
         public string DelFlag { get; set; }
 
-        [JsonProperty("dept")]
+        [JsonPropertyName("dept")]
         public VenueDeptInfo Dept { get; set; }
 
-        [JsonProperty("deptId")]
+        [JsonPropertyName("deptId")]
         public long DeptId { get; set; }
 
-        [JsonProperty("loginName")]
+        [JsonPropertyName("loginName")]
         public string LoginName { get; set; }
 
-        //[JsonProperty("params")]
+        //[JsonPropertyName("params")]
         //public Dictionary<string, object> Params { get; set; }
 
-        [JsonProperty("phonenumber")]
+        [JsonPropertyName("phonenumber")]
         public string Phonenumber { get; set; }
 
-        [JsonProperty("retirer")]
+        [JsonPropertyName("retirer")]
         public string Retirer { get; set; }
 
-        //[JsonProperty("roles")]
+        //[JsonPropertyName("roles")]
         //public List<string> Roles { get; set; }
 
-        [JsonProperty("sex")]
+        [JsonPropertyName("sex")]
         public string Sex { get; set; }
 
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; }
 
-        [JsonProperty("userId")]
+        [JsonPropertyName("userId")]
         public long UserId { get; set; }
 
-        [JsonProperty("userName")]
+        [JsonPropertyName("userName")]
         public string UserName { get; set; }
 
-        [JsonProperty("userType")]
+        [JsonPropertyName("userType")]
         public string UserType { get; set; }
 
-        //[JsonProperty("venues")]
+        //[JsonPropertyName("venues")]
         //public List<string> Venues { get; set; }
     }
 
     public partial class VenueDeptInfo
     {
-        [JsonProperty("deptId")]
+        [JsonPropertyName("deptId")]
         public long DeptId { get; set; }
 
-        [JsonProperty("deptName")]
+        [JsonPropertyName("deptName")]
         public string DeptName { get; set; }
 
-        [JsonProperty("orderNum")]
+        [JsonPropertyName("orderNum")]
         public string OrderNum { get; set; }
 
-        //[JsonProperty("params")]
+        //[JsonPropertyName("params")]
         //public Dictionary<string, object> Params { get; set; }
 
-        [JsonProperty("parentId")]
+        [JsonPropertyName("parentId")]
         public long ParentId { get; set; }
 
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; }
     }
 
     public partial class VenueMotionType
     {
-        [JsonProperty("img")]
+        [JsonPropertyName("img")]
         public string Img { get; set; }
 
-        [JsonProperty("venueType")]
+        [JsonPropertyName("venueType")]
         public string VenueType { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("venueTypeEn")]
+        [JsonPropertyName("venueTypeEn")]
         public string VenueTypeEn { get; set; }
     }
 
     public partial class VenueItem
     {
-        [JsonProperty("campusId")]
+        [JsonPropertyName("campusId")]
         public string CampusId { get; set; }
 
-        [JsonProperty("campusName")]
+        [JsonPropertyName("campusName")]
         public string CampusName { get; set; }
 
-        [JsonProperty("createBy")]
+        [JsonPropertyName("createBy")]
         public string CreateBy { get; set; }
 
-        [JsonProperty("createTime")]
+        [JsonPropertyName("createTime")]
         public string CreateTime { get; set; }
 
-        [JsonProperty("images")]
+        [JsonPropertyName("images")]
         public string Images { get; set; }
 
-        [JsonProperty("isAvailable")]
+        [JsonPropertyName("isAvailable")]
         public string IsAvailable { get; set; }
 
-        [JsonProperty("latitude")]
+        [JsonPropertyName("latitude")]
         public string Latitude { get; set; }
 
-        [JsonProperty("longitude")]
+        [JsonPropertyName("longitude")]
         public string Longitude { get; set; }
 
-        [JsonProperty("openTime")]
+        [JsonPropertyName("openTime")]
         public string OpenTime { get; set; }
 
-        [JsonProperty("orderType")]
+        [JsonPropertyName("orderType")]
         public string OrderType { get; set; }
 
-        [JsonProperty("otherPageNum")]
+        [JsonPropertyName("otherPageNum")]
         public long OtherPageNum { get; set; }
 
-        [JsonProperty("otherPageSize")]
+        [JsonPropertyName("otherPageSize")]
         public long OtherPageSize { get; set; }
 
-        //[JsonProperty("params")]
+        //[JsonPropertyName("params")]
         //public Dictionary<string, object> Params { get; set; }
 
-        [JsonProperty("updateBy")]
+        [JsonPropertyName("updateBy")]
         public string UpdateBy { get; set; }
 
-        [JsonProperty("updateTime")]
+        [JsonPropertyName("updateTime")]
         public string UpdateTime { get; set; }
 
-        [JsonProperty("venueAddr")]
+        [JsonPropertyName("venueAddr")]
         public string VenueAddr { get; set; }
 
-        [JsonProperty("venueAmin")]
+        [JsonPropertyName("venueAmin")]
         public string VenueAmin { get; set; }
 
-        [JsonProperty("venueFacilities")]
+        [JsonPropertyName("venueFacilities")]
         public string VenueFacilities { get; set; }
 
-        [JsonProperty("venueId")]
+        [JsonPropertyName("venueId")]
         public string VenueId { get; set; }
 
-        [JsonProperty("venueInfo")]
+        [JsonPropertyName("venueInfo")]
         public string VenueInfo { get; set; }
 
-        [JsonProperty("venueMobile")]
+        [JsonPropertyName("venueMobile")]
         public string VenueMobile { get; set; }
 
-        [JsonProperty("venueName")]
+        [JsonPropertyName("venueName")]
         public string VenueName { get; set; }
 
-        [JsonProperty("venueNameEn")]
+        [JsonPropertyName("venueNameEn")]
         public string VenueNameEn { get; set; }
 
-        [JsonProperty("venueRule")]
+        [JsonPropertyName("venueRule")]
         public string VenueRule { get; set; }
 
-        [JsonProperty("venueRuleEn")]
+        [JsonPropertyName("venueRuleEn")]
         public string VenueRuleEn { get; set; }
 
-        [JsonProperty("venueState")]
+        [JsonPropertyName("venueState")]
         public string VenueState { get; set; }
     }
 
     public partial class VenueInfoDto
     {
-        [JsonProperty("campusId")]
+        [JsonPropertyName("campusId")]
         public string CampusId { get; set; }
 
-        [JsonProperty("campusName")]
+        [JsonPropertyName("campusName")]
         public string CampusName { get; set; }
 
-        [JsonProperty("createBy")]
+        [JsonPropertyName("createBy")]
         public string CreateBy { get; set; }
 
-        [JsonProperty("createTime")]
+        [JsonPropertyName("createTime")]
         public string CreateTime { get; set; }
 
-        [JsonProperty("images")]
+        [JsonPropertyName("images")]
         public string Images { get; set; }
 
-        [JsonProperty("isAvailable")]
+        [JsonPropertyName("isAvailable")]
         public string IsAvailable { get; set; }
 
-        [JsonProperty("latitude")]
+        [JsonPropertyName("latitude")]
         public string Latitude { get; set; }
 
-        [JsonProperty("longitude")]
+        [JsonPropertyName("longitude")]
         public string Longitude { get; set; }
 
-        [JsonProperty("motionTypes")]
+        [JsonPropertyName("motionTypes")]
         public List<VenueInfoMotionType> MotionTypes { get; set; }
 
-        [JsonProperty("openTime")]
+        [JsonPropertyName("openTime")]
         public string OpenTime { get; set; }
 
-        [JsonProperty("orderType")]
+        [JsonPropertyName("orderType")]
         public string OrderType { get; set; }
 
-        [JsonProperty("otherPageNum")]
+        [JsonPropertyName("otherPageNum")]
         public long OtherPageNum { get; set; }
 
-        [JsonProperty("otherPageSize")]
+        [JsonPropertyName("otherPageSize")]
         public long OtherPageSize { get; set; }
 
-        //[JsonProperty("params")]
+        //[JsonPropertyName("params")]
         //public Dictionary<string, object> Params { get; set; }
 
-        [JsonProperty("updateBy")]
+        [JsonPropertyName("updateBy")]
         public string UpdateBy { get; set; }
 
-        [JsonProperty("updateTime")]
+        [JsonPropertyName("updateTime")]
         public string UpdateTime { get; set; }
 
-        [JsonProperty("venueAddr")]
+        [JsonPropertyName("venueAddr")]
         public string VenueAddr { get; set; }
 
-        [JsonProperty("venueAmin")]
+        [JsonPropertyName("venueAmin")]
         public string VenueAmin { get; set; }
 
-        [JsonProperty("venueFacilities")]
+        [JsonPropertyName("venueFacilities")]
         public string VenueFacilities { get; set; }
 
-        [JsonProperty("venueId")]
+        [JsonPropertyName("venueId")]
         public string VenueId { get; set; }
 
-        [JsonProperty("venueInfo")]
+        [JsonPropertyName("venueInfo")]
         public string VenueInfo { get; set; }
 
-        [JsonProperty("venueMobile")]
+        [JsonPropertyName("venueMobile")]
         public string VenueMobile { get; set; }
 
-        [JsonProperty("venueName")]
+        [JsonPropertyName("venueName")]
         public string VenueName { get; set; }
 
-        [JsonProperty("venueRule")]
+        [JsonPropertyName("venueRule")]
         public string VenueRule { get; set; }
 
-        [JsonProperty("venueState")]
+        [JsonPropertyName("venueState")]
         public string VenueState { get; set; }
     }
 
     public partial class VenueInfoMotionType
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("image")]
+        [JsonPropertyName("image")]
         public string Image { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("nameEn")]
+        [JsonPropertyName("nameEn")]
         public string NameEn { get; set; }
 
-        [JsonProperty("nowDate")]
+        [JsonPropertyName("nowDate")]
         public string NowDate { get; set; }
 
-        [JsonProperty("tension")]
+        [JsonPropertyName("tension")]
         public string Tension { get; set; }
     }
 
     public partial class VenueDateInfo
     {
-        [JsonProperty("date")]
+        [JsonPropertyName("date")]
         public string Date { get; set; }
 
-        [JsonProperty("dateId")]
+        [JsonPropertyName("dateId")]
         public string DateId { get; set; }
 
-        [JsonProperty("isAll")]
+        [JsonPropertyName("isAll")]
         public bool IsAll { get; set; }
 
-        [JsonProperty("open")]
+        [JsonPropertyName("open")]
         public bool Open { get; set; }
     }
 
     public partial class VenueFieldInfo
     {
-        [JsonProperty("detailSort")]
+        [JsonPropertyName("detailSort")]
         public long DetailSort { get; set; }
 
-        [JsonProperty("fieldDetailStatus")]
+        [JsonPropertyName("fieldDetailStatus")]
         public string FieldDetailStatus { get; set; }
 
-        [JsonProperty("fieldId")]
+        [JsonPropertyName("fieldId")]
         public string FieldId { get; set; }
 
-        [JsonProperty("fieldName")]
+        [JsonPropertyName("fieldName")]
         public string FieldName { get; set; }
 
-        [JsonProperty("image")]
+        [JsonPropertyName("image")]
         public string Image { get; set; }
 
-        [JsonProperty("imageWhite")]
+        [JsonPropertyName("imageWhite")]
         public string ImageWhite { get; set; }
 
-        [JsonProperty("priceList")]
+        [JsonPropertyName("priceList")]
         public List<VenueFieldPriceInfo> PriceList { get; set; }
     }
 
     public partial class VenueFieldPriceInfo
     {
-        [JsonProperty("count")]
+        [JsonPropertyName("count")]
         public string Count { get; set; }
 
-        [JsonProperty("flag")]
+        [JsonPropertyName("flag")]
         public string Flag { get; set; }
 
-        [JsonProperty("price")]
+        [JsonPropertyName("price")]
         public string Price { get; set; }
 
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; }
 
-        [JsonProperty("sign")]
+        [JsonPropertyName("sign")]
         public string Sign { get; set; }
     }
 
     public partial class VenueOrderInput
     {
-        [JsonProperty("fieldType")]
+        [JsonPropertyName("fieldType")]
         public string FieldType { get; set; }
 
-        [JsonProperty("returnUrl")]
+        [JsonPropertyName("returnUrl")]
         public string ReturnUrl { get; set; }
 
-        [JsonProperty("scheduleDate")]
+        [JsonPropertyName("scheduleDate")]
         public string ScheduleDate { get; set; }
 
-        [JsonProperty("spaces")]
+        [JsonPropertyName("spaces")]
         public List<VenueOrderSpaceInput> Spaces { get; set; }
 
-        [JsonProperty("tenSity")]
+        [JsonPropertyName("tenSity")]
         public string TenSity { get; set; }
 
-        [JsonProperty("venTypeId")]
+        [JsonPropertyName("venTypeId")]
         public string VenTypeId { get; set; }
 
-        [JsonProperty("venueId")]
+        [JsonPropertyName("venueId")]
         public string VenueId { get; set; }
 
-        [JsonProperty("week")]
+        [JsonPropertyName("week")]
         public string Week { get; set; }
     }
 
     public partial class VenueOrderSpaceInput
     {
-        [JsonProperty("count", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("count")]
         public long? Count { get; set; }
 
-        [JsonProperty("scheduleTime", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("scheduleTime")]
         public string ScheduleTime { get; set; }
 
-        [JsonProperty("sign", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("sign")]
         public string Sign { get; set; }
 
-        [JsonProperty("status", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("status")]
         public long? Status { get; set; }
 
-        [JsonProperty("subSiteId", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("subSiteId")]
         public string SubSiteId { get; set; }
 
-        [JsonProperty("subSitename", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("subSitename")]
         public string SubSitename { get; set; }
 
-        [JsonProperty("tensity", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("tensity")]
         public string Tensity { get; set; }
 
-        [JsonProperty("venueNum", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("venueNum")]
         public long? VenueNum { get; set; }
 
-        [JsonProperty("venuePrice", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("venuePrice")]
         public string VenuePrice { get; set; }
     }
 
     public partial class VenueOrderInfo
     {
-        [JsonProperty("pOrderid")]
+        [JsonPropertyName("pOrderid")]
         public string Id { get; set; }
 
-        [JsonProperty("accompanyings")]
+        [JsonPropertyName("accompanyings")]
         public List<VenueOrderAccompanyInfo> Accompanyings { get; set; }
 
-        [JsonProperty("actPrice")]
+        [JsonPropertyName("actPrice")]
         public long ActPrice { get; set; }
 
-        [JsonProperty("arrears")]
+        [JsonPropertyName("arrears")]
         public long Arrears { get; set; }
 
-        [JsonProperty("campusName")]
+        [JsonPropertyName("campusName")]
         public string CampusName { get; set; }
 
-        [JsonProperty("countPrice")]
+        [JsonPropertyName("countPrice")]
         public long CountPrice { get; set; }
 
-        [JsonProperty("images")]
+        [JsonPropertyName("images")]
         public string Images { get; set; }
 
-        [JsonProperty("isEntourage")]
+        [JsonPropertyName("isEntourage")]
         public string IsEntourage { get; set; }
 
-        [JsonProperty("maxNum")]
+        [JsonPropertyName("maxNum")]
         public long MaxNum { get; set; }
 
-        [JsonProperty("orderstateid")]
+        [JsonPropertyName("orderstateid")]
         public string OrderStateId { get; set; }
 
-        [JsonProperty("ordercreatement")]
+        [JsonPropertyName("ordercreatement")]
         public string OrderCreatement { get; set; }
 
-        [JsonProperty("price")]
+        [JsonPropertyName("price")]
         public long Price { get; set; }
 
-        [JsonProperty("refundPrice")]
+        [JsonPropertyName("refundPrice")]
         public long RefundPrice { get; set; }
 
-        [JsonProperty("remainingTime")]
+        [JsonPropertyName("remainingTime")]
         public long RemainingTime { get; set; }
 
-        [JsonProperty("scheduleDate")]
+        [JsonPropertyName("scheduleDate")]
         public string ScheduleDate { get; set; }
 
-        [JsonProperty("scDate")]
+        [JsonPropertyName("scDate")]
         public string ScDate { get; set; }
 
-        [JsonProperty("spaces")]
+        [JsonPropertyName("spaces")]
         public List<VenueOrderSpaceInfo> Spaces { get; set; }
 
-        [JsonProperty("spaceInfo")]
+        [JsonPropertyName("spaceInfo")]
         public string SpaceInfo { get; set; }
 
-        [JsonProperty("sumMoney")]
+        [JsonPropertyName("sumMoney")]
         public long SumMoney { get; set; }
 
-        [JsonProperty("venueAddress")]
+        [JsonPropertyName("venueAddress")]
         public string VenueAddress { get; set; }
 
-        [JsonProperty("venueName")]
+        [JsonPropertyName("venueName")]
         public string VenueName { get; set; }
 
-        [JsonProperty("week")]
+        [JsonPropertyName("week")]
         public string Week { get; set; }
     }
 
     public partial class VenueOrderAccompanyInfo
     {
-        [JsonProperty("callBack", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("callBack")]
         public string CallBack { get; set; }
 
-        [JsonProperty("countPrice", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("countPrice")]
         public long? CountPrice { get; set; }
 
-        [JsonProperty("deptName", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("deptName")]
         public string DeptName { get; set; }
 
-        [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("isavaliable", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("isavaliable")]
         public string Isavaliable { get; set; }
 
-        [JsonProperty("mobile", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("mobile")]
         public string Mobile { get; set; }
 
-        [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("orderCreatement", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("orderCreatement")]
         public string OrderCreatement { get; set; }
 
-        [JsonProperty("orderFinishTime", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("orderFinishTime")]
         public string OrderFinishTime { get; set; }
 
-        [JsonProperty("orderId", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("orderId")]
         public string OrderId { get; set; }
 
-        [JsonProperty("orderStateId", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("orderStateId")]
         public string OrderStateId { get; set; }
 
-        [JsonProperty("orderUpdateTime", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("orderUpdateTime")]
         public string OrderUpdateTime { get; set; }
 
-        [JsonProperty("userId", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("userId")]
         public string UserId { get; set; }
 
-        [JsonProperty("venId", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("venId")]
         public string VenId { get; set; }
 
-        [JsonProperty("venName", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("venName")]
         public string VenName { get; set; }
 
-        [JsonProperty("venueAddress", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("venueAddress")]
         public string VenueAddress { get; set; }
 
-        [JsonProperty("venueId", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("venueId")]
         public string VenueId { get; set; }
 
-        [JsonProperty("venueName", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("venueName")]
         public string VenueName { get; set; }
 
-        [JsonProperty("writeCode", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("writeCode")]
         public string WriteCode { get; set; }
     }
 
     public partial class VenueOrderSpaceInfo
     {
-        [JsonProperty("isAvailable", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("isAvailable")]
         public string IsAvailable { get; set; }
 
-        [JsonProperty("isUsed", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("isUsed")]
         public string IsUsed { get; set; }
 
-        [JsonProperty("lockField", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("lockField")]
         public string LockField { get; set; }
 
-        [JsonProperty("maxNum", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("maxNum")]
         public long? MaxNum { get; set; }
 
-        [JsonProperty("orderId", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("orderId")]
         public string OrderId { get; set; }
 
-        [JsonProperty("orderType", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("orderType")]
         public string OrderType { get; set; }
 
-        //[JsonProperty("params", NullValueHandling = NullValueHandling.Ignore)]
+        //[JsonPropertyName("params")]
         //public Dictionary<string, object> Params { get; set; }
 
-        [JsonProperty("scheduleDate", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("scheduleDate")]
         public string ScheduleDate { get; set; }
 
-        [JsonProperty("scheduleId", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("scheduleId")]
         public string ScheduleId { get; set; }
 
-        [JsonProperty("scheduleTime", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("scheduleTime")]
         public string ScheduleTime { get; set; }
 
-        [JsonProperty("subSiteId", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("subSiteId")]
         public string SubSiteId { get; set; }
 
-        [JsonProperty("subSitename", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("subSitename")]
         public string SubSitename { get; set; }
 
-        [JsonProperty("tensity", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("tensity")]
         public string Tensity { get; set; }
 
-        [JsonProperty("venued", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("venued")]
         public string Venued { get; set; }
 
-        [JsonProperty("venueId", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("venueId")]
         public string VenueId { get; set; }
 
-        [JsonProperty("venueName", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("venueName")]
         public string VenueName { get; set; }
 
-        [JsonProperty("venueNum", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("venueNum")]
         public long? VenueNum { get; set; }
 
-        [JsonProperty("venuePrice", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("venuePrice")]
         public long? VenuePrice { get; set; }
 
-        [JsonProperty("venueWeek", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("venueWeek")]
         public string VenueWeek { get; set; }
     }
 
     public partial class VenueAccompanyListInfo
     {
-        [JsonProperty("current")]
+        [JsonPropertyName("current")]
         public long Current { get; set; }
 
-        [JsonProperty("hitCount")]
+        [JsonPropertyName("hitCount")]
         public bool HitCount { get; set; }
 
-        [JsonProperty("optimizeCountSql")]
+        [JsonPropertyName("optimizeCountSql")]
         public bool OptimizeCountSql { get; set; }
 
-        //[JsonProperty("orders")]
+        //[JsonPropertyName("orders")]
         //public List<string> Orders { get; set; }
 
-        [JsonProperty("pages")]
+        [JsonPropertyName("pages")]
         public long Pages { get; set; }
 
-        [JsonProperty("records")]
+        [JsonPropertyName("records")]
         public List<VenueAccompanyRecord> Records { get; set; }
 
-        [JsonProperty("searchCount")]
+        [JsonPropertyName("searchCount")]
         public bool SearchCount { get; set; }
 
-        [JsonProperty("size")]
+        [JsonPropertyName("size")]
         public long Size { get; set; }
 
-        [JsonProperty("total")]
+        [JsonPropertyName("total")]
         public long Total { get; set; }
     }
 
     public partial class VenueAccompanyRecord
     {
-        [JsonProperty("checked")]
+        [JsonPropertyName("checked")]
         public bool Checked { get; set; }
 
-        [JsonProperty("creatby")]
+        [JsonPropertyName("creatby")]
         public string Creatby { get; set; }
 
-        [JsonProperty("creatDate")]
+        [JsonPropertyName("creatDate")]
         public string CreatDate { get; set; }
 
-        [JsonProperty("dept")]
+        [JsonPropertyName("dept")]
         public string Dept { get; set; }
 
-        [JsonProperty("deptName")]
+        [JsonPropertyName("deptName")]
         public string DeptName { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("isAvailable")]
+        [JsonPropertyName("isAvailable")]
         public string IsAvailable { get; set; }
 
-        [JsonProperty("loginName")]
+        [JsonPropertyName("loginName")]
         public string LoginName { get; set; }
 
-        [JsonProperty("mobile")]
+        [JsonPropertyName("mobile")]
         public string Mobile { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("userId")]
+        [JsonPropertyName("userId")]
         public string UserId { get; set; }
     }
 
     public partial class VenueAccompanySaveInput
     {
-        [JsonProperty("entourageFamilies")]
+        [JsonPropertyName("entourageFamilies")]
         public List<VenueAccompanyRecord> EntourageFamilies { get; set; }
 
-        [JsonProperty("flag")]
+        [JsonPropertyName("flag")]
         public long Flag { get; set; }
 
-        [JsonProperty("orderId")]
+        [JsonPropertyName("orderId")]
         public string OrderId { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
     }
 }

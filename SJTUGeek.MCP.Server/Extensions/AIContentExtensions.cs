@@ -18,29 +18,38 @@ namespace SJTUGeek.MCP.Server.Extensions
 #endif
         }
 
-        public static Content ToContent(this AIContent content) =>
+        public static ContentBlock ToContent(this AIContent content) =>
         content switch
         {
-            TextContent textContent => new()
+            TextContent textContent => new TextContentBlock
             {
                 Text = textContent.Text,
-                Type = "text",
             },
 
-            DataContent dataContent => new()
+            DataContent dataContent when dataContent.HasTopLevelMediaType("image") => new ImageContentBlock
             {
-                Data = dataContent.GetBase64Data(),
+                Data = dataContent.Base64Data.ToString(),
                 MimeType = dataContent.MediaType,
-                Type =
-                    dataContent.HasTopLevelMediaType("image") ? "image" :
-                    dataContent.HasTopLevelMediaType("audio") ? "audio" :
-                    "resource",
             },
 
-            _ => new()
+            DataContent dataContent when dataContent.HasTopLevelMediaType("audio") => new AudioContentBlock
+            {
+                Data = dataContent.Base64Data.ToString(),
+                MimeType = dataContent.MediaType,
+            },
+
+            DataContent dataContent => new EmbeddedResourceBlock
+            {
+                Resource = new BlobResourceContents
+                {
+                    Blob = dataContent.Base64Data.ToString(),
+                    MimeType = dataContent.MediaType,
+                }
+            },
+
+            _ => new TextContentBlock
             {
                 Text = JsonSerializer.Serialize(content, McpJsonUtilities.DefaultOptions.GetTypeInfo(typeof(object))),
-                Type = "text",
             }
         };
     }
