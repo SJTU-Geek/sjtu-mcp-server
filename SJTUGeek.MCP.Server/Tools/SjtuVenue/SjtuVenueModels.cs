@@ -328,6 +328,9 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
         [JsonProperty("name")]
         public string Name { get; set; }
 
+        [JsonProperty("nameEn")]
+        public string NameEn { get; set; }
+
         [JsonProperty("nowDate")]
         public string NowDate { get; set; }
 

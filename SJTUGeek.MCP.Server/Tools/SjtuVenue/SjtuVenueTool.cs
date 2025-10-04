@@ -46,17 +46,17 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             VenueItem v = await SearchForVenue(venue_name);
 
             //return $"{venue_name} 匹配 {vs[matchedVenueInfo.Item2].VenueName}（可信度：{matchedVenueInfo.Item1}）";
+            var v_info = await _venue.GetVenueInfo(v.VenueId);
 
-            VenueMotionType m = await SearchForMotionType(room_or_sports_name);
+            VenueMotionType m = await SearchForMotionType(room_or_sports_name, v_info.MotionTypes.Select(x=>new VenueMotionType() { Id = x.Id, Img = x.Image, VenueType = x.Name, VenueTypeEn = x.NameEn}).ToList());
 
             //return $"{room_or_sports_name} 匹配 {ms[matchedMotionInfo.Item2].VenueType}（可信度：{matchedMotionInfo.Item1}）";
 
-            var v_info = await _venue.GetVenueInfo(v.VenueId);
-            var r = v_info.MotionTypes.FirstOrDefault(x => x.Name == room_or_sports_name);
-            if (r == null)
+            if (m == null)
             {
-                throw new McpException($"找不到区域 {r}");
+                throw new McpException($"找不到区域 {room_or_sports_name}");
             }
+            var r = v_info.MotionTypes.First(x => x.Id == m.Id);
 
             var res35 = await _venue.GetDateInfo();
             var targetDate = res35.FirstOrDefault(x => x.Date == date);
@@ -189,14 +189,19 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
         {
             await _venue.Login();
             VenueItem v = await SearchForVenue(venue_name);
-            VenueMotionType m = await SearchForMotionType(room_or_sports_name);
 
+            //return $"{venue_name} 匹配 {vs[matchedVenueInfo.Item2].VenueName}（可信度：{matchedVenueInfo.Item1}）";
             var v_info = await _venue.GetVenueInfo(v.VenueId);
-            var r = v_info.MotionTypes.FirstOrDefault(x => x.Name == room_or_sports_name);
-            if (r == null)
+
+            VenueMotionType m = await SearchForMotionType(room_or_sports_name, v_info.MotionTypes.Select(x => new VenueMotionType() { Id = x.Id, Img = x.Image, VenueType = x.Name, VenueTypeEn = x.NameEn }).ToList());
+
+            //return $"{room_or_sports_name} 匹配 {ms[matchedMotionInfo.Item2].VenueType}（可信度：{matchedMotionInfo.Item1}）";
+
+            if (m == null)
             {
-                throw new McpException($"找不到区域 {r}");
+                throw new McpException($"找不到区域 {room_or_sports_name}");
             }
+            var r = v_info.MotionTypes.First(x => x.Id == m.Id);
 
             var res35 = await _venue.GetDateInfo();
             var targetDate = res35.FirstOrDefault(x => x.Date == date);
@@ -266,9 +271,9 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             return v;
         }
 
-        private async Task<VenueMotionType> SearchForMotionType(string room_or_sports_name)
+        private async Task<VenueMotionType> SearchForMotionType(string room_or_sports_name, List<VenueMotionType> motionTypes = null)
         {
-            var ms = await _venue.GetMotionTypes();
+            var ms = motionTypes ?? await _venue.GetMotionTypes();
 
             // add english
             var ms_doc = ms.Select(m => $"{m.VenueType}（{m.VenueTypeEn}）").ToList();
@@ -277,7 +282,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             var m = ms[matchedMotionInfo.Item2];
 
             // it should be high
-            if (matchedMotionInfo.Item1 < 0.8)
+            if (matchedMotionInfo.Item1 < 0.7)
             {
                 throw new McpException($"无法匹配运动类型 {room_or_sports_name}，请检查输入是否正确");
             }

@@ -16,6 +16,11 @@ namespace SJTUGeek.MCP.Server.Modules
         public JaCookieProvider(IHttpContextAccessor contextAccessor)
         {
             _contextAccessor = contextAccessor;
+            if (_contextAccessor.HttpContext == null)
+            {
+                cookie = string.Empty;
+                return;
+            }
             cookie = _contextAccessor.HttpContext.Items.TryGetValue("JaAuthCookie", out var c) ? c.ToString() : string.Empty;
         }
 
