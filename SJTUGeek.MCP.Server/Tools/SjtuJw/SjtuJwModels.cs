@@ -991,4 +991,12 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuJw
         [JsonPropertyName("zymc")]
         public string Zymc { get; set; }
     }
+
+    [JsonSerializable(typeof(JwPersonalCourseList))]
+    [JsonSerializable(typeof(JwCourseScoreList))]
+    [JsonSerializable(typeof(JwGpaQueryResult))]
+    [JsonSerializable(typeof(JwExamInfoResult))]
+    internal partial class JwModelContext : JsonSerializerContext
+    {
+    }
 }

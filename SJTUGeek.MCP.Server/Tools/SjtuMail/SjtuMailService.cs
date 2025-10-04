@@ -99,7 +99,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuMail
             }
             else
             {
-                var res = JsonSerializer.Deserialize<Dictionary<string, ZimbraSearchResponse>>(resp.GetResponse());
+                var res = JsonSerializer.Deserialize<Dictionary<string, ZimbraSearchResponse>>(resp.GetResponse(), MailModelContext.Default.DictionaryStringZimbraSearchResponse);
                 return res.First().Value;
             }
         }
@@ -139,7 +139,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuMail
             }
             else
             {
-                var res = JsonSerializer.Deserialize<Dictionary<string, ZimbraGetMsgResponse>>(resp.GetResponse());
+                var res = JsonSerializer.Deserialize<Dictionary<string, ZimbraGetMsgResponse>>(resp.GetResponse(), MailModelContext.Default.DictionaryStringZimbraGetMsgResponse);
                 return res.First().Value;
             }
         }
@@ -160,7 +160,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuMail
             }
             else
             {
-                var res = JsonSerializer.Deserialize<Dictionary<string, ZimbraGetInfoResponse>>(resp.GetResponse());
+                var res = JsonSerializer.Deserialize<Dictionary<string, ZimbraGetInfoResponse>>(resp.GetResponse(), MailModelContext.Default.DictionaryStringZimbraGetInfoResponse);
                 return res.First().Value;
             }
         }
@@ -171,15 +171,15 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuMail
             request.AddRequest("SendMsgRequest", $$"""
                   {
                   "m": {
-                    "e": {{JsonSerializer.Serialize(participants)}},
+                    "e": {{JsonSerializer.Serialize(participants, MailModelContext.Default.ListZimbraMailParticipant)}},
                     "su": {
-                      "_content": {{JsonSerializer.Serialize(title)}}
+                      "_content": {{JsonSerializer.Serialize(title, MailModelContext.Default.String)}}
                     },
                     "mp": [
                       {
                         "ct": "text/plain",
                         "content": {
-                          "_content": {{JsonSerializer.Serialize(content)}}
+                          "_content": {{JsonSerializer.Serialize(content, MailModelContext.Default.String)}}
                         }
                       }
                     ]
@@ -196,7 +196,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuMail
             }
             else
             {
-                var res = JsonSerializer.Deserialize<Dictionary<string, ZimbraSendMsgResponse>>(resp.GetResponse());
+                var res = JsonSerializer.Deserialize<Dictionary<string, ZimbraSendMsgResponse>>(resp.GetResponse(), MailModelContext.Default.DictionaryStringZimbraSendMsgResponse);
                 return res.First().Value;
             }
         }

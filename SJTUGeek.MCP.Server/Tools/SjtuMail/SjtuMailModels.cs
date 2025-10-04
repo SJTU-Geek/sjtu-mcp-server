@@ -2,7 +2,6 @@
 
 namespace SJTUGeek.MCP.Server.Tools.SjtuMail
 {
-    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum MailBoxTypeEnum
     {
         Inbox, Sent, Drafts, Junk, Trash
@@ -195,5 +194,16 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuMail
 
         [JsonPropertyName("t")]
         public string T { get; set; }
+    }
+
+    [JsonSerializable(typeof(Dictionary<string, ZimbraSearchResponse>))]
+    [JsonSerializable(typeof(Dictionary<string, ZimbraGetMsgResponse>))]
+    [JsonSerializable(typeof(Dictionary<string, ZimbraGetInfoResponse>))]
+    [JsonSerializable(typeof(Dictionary<string, ZimbraSendMsgResponse>))]
+    [JsonSerializable(typeof(List<ZimbraMailParticipant>))]
+    [JsonSerializable(typeof(string))]
+    [JsonSerializable(typeof(MailBoxTypeEnum))]
+    internal partial class MailModelContext : JsonSerializerContext
+    {
     }
 }

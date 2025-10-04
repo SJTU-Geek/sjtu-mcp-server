@@ -722,4 +722,21 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
         [JsonPropertyName("type")]
         public string Type { get; set; }
     }
+
+    [JsonSerializable(typeof(VenueResWrapper<VenueUserInfo>))]
+    [JsonSerializable(typeof(VenuePagedResWrapper<VenueItem>))]
+    [JsonSerializable(typeof(List<VenueMotionType>))]
+    [JsonSerializable(typeof(VenueResWrapper<VenueInfoDto>))]
+    [JsonSerializable(typeof(VenueResWrapper<List<VenueDateInfo>>))]
+    [JsonSerializable(typeof(VenueResWrapper<List<VenueFieldInfo>>))]
+    [JsonSerializable(typeof(VenueResWrapper<string>))]
+    [JsonSerializable(typeof(VenueResWrapper<int>))]
+    [JsonSerializable(typeof(VenueResWrapper<VenueOrderInfo>))]
+    [JsonSerializable(typeof(VenueOrderListResWrapper))]
+    [JsonSerializable(typeof(VenueResWrapper<VenueAccompanyListInfo>))]
+    [JsonSerializable(typeof(VenueOrderInput))]
+    [JsonSerializable(typeof(VenueAccompanySaveInput))]
+    internal partial class VenueModelContext : JsonSerializerContext
+    {
+    }
 }

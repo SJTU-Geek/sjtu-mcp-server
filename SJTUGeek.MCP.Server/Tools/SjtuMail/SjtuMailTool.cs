@@ -21,13 +21,14 @@ namespace SJTUGeek.MCP.Server.Tools
         [McpServerTool(Name = "get_personal_mails"), Description("Get the list of emails in the specified inbox in your personal mailbox.")]
         public async Task<object> ToolGetMails(
             [Description("The specified mailbox.")]
-            MailBoxTypeEnum mailbox = MailBoxTypeEnum.Inbox,
+            string mailbox = "Inbox",
             [Description("Page index.")]
             int page = 1
         )
         {
+            MailBoxTypeEnum _mailbox = Enum.Parse<MailBoxTypeEnum>(mailbox, true);
             await _mail.Login();
-            var mails = await _mail.GetMails(mailbox, page);
+            var mails = await _mail.GetMails(_mailbox, page);
             if (mails.M == null || mails.M.Length == 0)
                 return new CallToolResult() { IsError = false, Content = new List<ContentBlock>() { new TextContentBlock() { Text = "找不到邮件！" } } };
             var res = RenderMailList(mails);

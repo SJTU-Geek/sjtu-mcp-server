@@ -61,7 +61,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuJw
             {
                 throw new McpException(e.Message);
             }
-            var json = await res.Content.ReadFromJsonAsync<JwPersonalCourseList>();
+            var json = await res.Content.ReadFromJsonAsync<JwPersonalCourseList>(JwModelContext.Default.JwPersonalCourseList);
             return json;
         }
 
@@ -95,7 +95,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuJw
             {
                 throw new McpException(e.Message);
             }
-            var json = await res.Content.ReadFromJsonAsync<JwCourseScoreList>();
+            var json = await res.Content.ReadFromJsonAsync<JwCourseScoreList>(JwModelContext.Default.JwCourseScoreList);
             return json;
         }
 
@@ -171,7 +171,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuJw
             {
                 throw new McpException(e.Message);
             }
-            var json = await res.Content.ReadFromJsonAsync<JwGpaQueryResult>();
+            var json = await res.Content.ReadFromJsonAsync<JwGpaQueryResult>(JwModelContext.Default.JwGpaQueryResult);
             return json;
         }
 
@@ -210,7 +210,7 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuJw
             {
                 throw new McpException(e.Message);
             }
-            var json = await res.Content.ReadFromJsonAsync<JwExamInfoResult>();
+            var json = await res.Content.ReadFromJsonAsync<JwExamInfoResult>(JwModelContext.Default.JwExamInfoResult);
             return json;
         }
     }

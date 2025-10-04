@@ -8,6 +8,7 @@
     <ApplicationIcon>sjtu-mcp.ico</ApplicationIcon>
 	<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
 	<PublishAot>true</PublishAot>
+	<TrimmerSingleWarn>false</TrimmerSingleWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,13 +16,13 @@
     <PackageReference Include="LLamaSharp" Version="0.24.0" />
     <PackageReference Include="LLamaSharp.Backend.Cpu" Version="0.24.0" />
     <PackageReference Include="Microsoft.Extensions.AI.Abstractions" Version="9.9.1" />
-    <PackageReference Include="ReverseMarkdown" Version="4.7.0" />
+    <PackageReference Include="ReverseMarkdown.Aot" Version="4.8.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.9" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.1.6" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
     <PackageReference Include="System.IO.Hashing" Version="9.0.4" />
     <PackageReference Include="System.Text.Json" Version="9.0.9" />
-    <PackageReference Include="Teru.Code.Zimbra" Version="1.0.2" />
+    <PackageReference Include="Teru.Code.Zimbra" Version="1.0.3" />
   </ItemGroup>
 
   <ItemGroup>

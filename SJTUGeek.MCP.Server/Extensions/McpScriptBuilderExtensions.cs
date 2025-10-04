@@ -11,7 +11,7 @@ namespace SJTUGeek.MCP.Server.Extensions
         {
             options.Capabilities ??= new();
             options.Capabilities.Tools ??= new();
-            options.Capabilities.Tools.ToolCollection ??= new();
+            options.ToolCollection ??= new();
         }
 
         public static IMcpServerBuilder WithAllMyTools(this IMcpServerBuilder builder)

@@ -281,6 +281,9 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuVenue
             var matchedMotionInfo = await _rerank.FindMostRelevant(room_or_sports_name, ms_doc);
             var m = ms[matchedMotionInfo.Item2];
 
+            // print debug info
+            _logger.LogInformation($"MotionType match: {room_or_sports_name} -> {m.VenueType}（{m.VenueTypeEn}），可信度：{matchedMotionInfo.Item1}");
+
             // it should be high
             if (matchedMotionInfo.Item1 < 0.7)
             {
