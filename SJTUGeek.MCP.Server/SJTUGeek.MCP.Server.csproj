@@ -9,6 +9,13 @@
 	<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
 	<PublishAot>true</PublishAot>
 	<TrimmerSingleWarn>false</TrimmerSingleWarn>
+	<OutputType>Library</OutputType>
+	<PublishTrimmed>true</PublishTrimmed>
+  </PropertyGroup>
+
+  <PropertyGroup>
+  	<StartupHookSupport Condition="'$(Configuration)' == 'Debug'">true</StartupHookSupport>
+  	<StartupHookSupport Condition="'$(Configuration)' == 'Release'">false</StartupHookSupport>
   </PropertyGroup>
 
   <ItemGroup>

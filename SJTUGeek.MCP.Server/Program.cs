@@ -10,9 +10,15 @@ using System.CommandLine;
 
 namespace SJTUGeek.MCP.Server
 {
-    public class Program
+    public static class Program
     {
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
+        {
+            ParseArgs(args);
+            RunApp(AppCmdOption.Default);
+        }
+
+        public static void ParseArgs(string[] args)
         {
             var portOption = new Option<int>(
                 aliases: new string[] { "--port", "-p" },
@@ -60,7 +66,7 @@ namespace SJTUGeek.MCP.Server
 
             rootCommand.SetHandler((appOptions) =>
             {
-                RunApp(appOptions);
+                AppCmdOption.Default = appOptions;
             }, new AppCmdOptionBinder(
                 portOption,
                 hostOption,
@@ -71,18 +77,11 @@ namespace SJTUGeek.MCP.Server
                 llmRerankModelOption
             ));
 
-            await rootCommand.InvokeAsync(args);
+            rootCommand.Invoke(args);
         }
 
         public static void RunApp(AppCmdOption appOptions)
         {
-            //if (appOptions.IsError)
-            //{
-            //    Console.Error.WriteLine(appOptions.Message);
-            //    return;
-            //}
-            AppCmdOption.Default = appOptions;
-
             if (appOptions.EnableStdio)
                 RunStdioApp(appOptions);
             else
