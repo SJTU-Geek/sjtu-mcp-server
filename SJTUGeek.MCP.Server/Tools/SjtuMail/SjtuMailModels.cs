@@ -179,6 +179,9 @@ namespace SJTUGeek.MCP.Server.Tools.SjtuMail
 
         [JsonPropertyName("s")]
         public int S { get; set; }
+
+        [JsonPropertyName("mp")]
+        public ZimbraMailContent[] Mp { get; set; }
     }
 
     public partial class ZimbraMailParticipant

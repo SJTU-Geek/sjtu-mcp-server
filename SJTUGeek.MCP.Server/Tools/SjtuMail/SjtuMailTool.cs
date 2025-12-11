@@ -88,7 +88,13 @@ namespace SJTUGeek.MCP.Server.Tools
             return "发送成功！";
         }
 
-        
+        public string RenderMailContent(ZimbraMailContent m)
+        {
+            if (m.Ct == "multipart/alternative")
+                return string.Join("\n", m.Mp.Select(m => RenderMailContent(m)));
+            return m.Content ?? "";
+        }
+
         public string RenderSingleMail(ZimbraMailInfo m)
         {
             var sender = m.E.FirstOrDefault(x => x.T == "f");
@@ -99,7 +105,7 @@ namespace SJTUGeek.MCP.Server.Tools
             $"  id：{m.Id}" + "\n" +
             $"  时间：{DateTimeOffset.FromUnixTimeMilliseconds(m.D).DateTime.ToString("G")}" + "\n" +
             (m.F != null ? $"  属性：{SjtuMailHelper.ConvertMailFlags(m.F)}" + "\n" : "") +
-            (m.Mp != null ? $"  内容：{m.Mp.First().Content}" : $"  摘要：{m.Fr}")
+            (m.Mp != null ? $"  内容：{string.Join("\n", m.Mp.Select(m => RenderMailContent(m)))}" : $"  摘要：{m.Fr}")
             ;
             return res;
         }
